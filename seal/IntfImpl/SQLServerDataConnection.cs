@@ -1,6 +1,7 @@
 ﻿using seal.Base;
 using seal.Enumeration;
 using seal.Helper;
+using seal.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -149,44 +150,101 @@ namespace seal.IntfImpl
             }
         }
 
-        public override string CompileQuery(Operation operation, Dictionary<string, object> raw)
+        private string ValueConverter(object value)
         {
+            if (value.GetType().IsSubclassOf(typeof(DateTime)) || value is DateTime)
+            {
+                return "'" + DateTimeUtility.GetSqlFormatDate((DateTime)value) + "'";
+            }
+
+            if ((value.GetType().IsSubclassOf(typeof(long))   || value is long)   || 
+                (value.GetType().IsSubclassOf(typeof(int))    || value is int)    || 
+                (value.GetType().IsSubclassOf(typeof(short))  || value is short)  ||
+                (value.GetType().IsSubclassOf(typeof(double)) || value is double) || 
+                (value.GetType().IsSubclassOf(typeof(float))  || value is float))
+            {
+                return value.ToString();
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(string)) || value is string)
+            {
+                return "'" +  value.ToString() + "'";
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(bool)) || value is bool)
+            {
+                if((bool) value == true)
+                {
+                    return "1";
+                }
+                return "0";
+            }
+
+            if  (value.GetType().IsSubclassOf(typeof(ModelTable)) || value is ModelTable)
+            {
+                return ((ModelTable)value).Id.ToString();
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(Enum)))
+            {
+                return ((int)value).ToString();
+            }
+
+            throw new ApiException("Invalid value for invoking to database");
+        }
+
+        public override string CompileQuery(Operation operation, string tableName, Dictionary<string, object> raw)
+        {
+            bool first = true;
             string query = "";
+            
             switch (operation)
             {
 
                 case Operation.Insert:
+                    string column = "(";
+                    string value = ") VALUES (";
 
                     foreach(KeyValuePair<string, object> keyVal in raw)
                     {
+                        if (!first)
+                        {
+                            column += ", ";
+                            value += ", ";
+                        }
 
-                    }
-
-                    column = "(Created, LastModified";
-                    value = ") VALUES ('" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "'";
-
-                    foreach (KeyValuePair<string, Tuple<string, PropertyInfo>> field in DataFactory.GetClassInfo(tableName))
-                    {
-                        column += ", " + field.Value.Item1;
-                        value += ", '" + GetPropertyValue(entity, field.Value.Item2) + "'";
+                        first = false;
+                        column += keyVal.Key;
+                        value += ValueConverter(keyVal.Value);
                     }
 
                     query += column + value + ")";
                     break;
 
-                case Enumeration.Operation.UPDATE:
-                    query = "UPDATE " + typeof(T).Name + " SET LastModified = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "'";
-                    foreach (KeyValuePair<string, Tuple<string, PropertyInfo>> field in DataFactory.GetClassInfo(tableName))
+                case Operation.Update:
+                    query = " SET ";
+
+                    foreach (KeyValuePair<string, object> keyVal in raw)
                     {
-                        query += ", " + field.Value.Item1 + " = '" + GetPropertyValue(entity, field.Value.Item2) + "'";
+                        if (!first)
+                        {
+                            query += ", ";
+                        }
+                        first = false;
+                        query += keyVal.Key + " = " + ValueConverter(keyVal.Value);
+
                     }
-                    query += " WHERE id = '" + ((Model)entity).Id.ToString() + "'";
                     break;
 
-                case Enumeration.Operation.DELETE:
+                case Operation.Delete:
                     query = "DELETE FROM " + typeof(T).Name + " WHERE id = '" + ((Model)entity).Id.ToString() + "'";
                     break;
+
+                default:
+                    throw new ApiException("Invalid SQL operation");
+ 
             }
+            return query;
         }
     }
 }
