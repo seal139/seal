@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="seal.Base.Data">
+    <Position X="1.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAGAAIAEAAAAAAAAAAAAAIABAAAAAAgCAAAA=</HashCode>
+      <FileName>Base\Data.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="seal.Base.ModelBase">
+    <Position X="4.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAIAAAASAABAAAAAAAAAAAAAEAAAAAAAAAEI=</HashCode>
+      <FileName>Base\ModelBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="seal.Base.ModelTable">
+    <Position X="5.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAASgAgAAAAAAAgAABAAAAACQAAAQAQAAAAAgAAAAAA=</HashCode>
+      <FileName>Base\ModelTable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="seal.Base.ModelView">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Base\ModelView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="seal.Helper.ApiException">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helper\APIException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="seal.Helper.Error">
+    <Position X="8" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAADABAAUAIAAQAAABAAAA=</HashCode>
+      <FileName>Helper\Error.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="seal.Helper.ModelFactory">
+    <Position X="8" Y="2" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAACAAAAAAABQAAAABAAAAAAABAAAA=</HashCode>
+      <FileName>Helper\ModelFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="seal.Helper.TableInfo" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAABAACAAAAAQAAACAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Helper\TableInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="seal.IntfImpl.SQLServerDataConnection">
+    <Position X="1.5" Y="4" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAIAAAAAAAAQAIAAAAIABAAAAAAACAAAA=</HashCode>
+      <FileName>IntfImpl\SQLServerDataConnection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="seal.Helper.FieldInfo" BaseTypeListCollapsed="true">
+    <Position X="15" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAIAAAAQAAACAAAAAAAEAKAAAAAA=</HashCode>
+      <FileName>Helper\FieldInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="seal.Interface.IApi">
+    <Position X="15.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAADAAAAAAAAACAEAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Interface\IApi.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IData">
+    <Position X="13.5" Y="2.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAIAEAAAAAAAAAAAAAIABAAAAAAACAAAA=</HashCode>
+      <FileName>Interface\IData.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IDataGenericOperation&lt;T&gt;">
+    <Position X="10.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\IDataGeneric.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IMapping">
+    <Position X="15.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\IMapping.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IModel">
+    <Position X="10.5" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAIAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\IModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IModelConverter">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Interface\IModelConverter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.ISerialization">
+    <Position X="12.5" Y="6.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\ISerialization.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IValidation">
+    <Position X="12.75" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAgAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\IValidation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="seal.Enumeration.Operation">
+    <Position X="13.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enumeration\Operation.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
