@@ -12,7 +12,7 @@ using FieldInfo = seal.Helper.FieldInfo;
 
 namespace seal.Base
 {
-    public class API : IApi, ISerialization
+    public class API : IApi
     {
         public static API GetInstance()
         {
@@ -24,13 +24,6 @@ namespace seal.Base
         public void Delete<T>(string whereClause) where T : ModelTable
         {
             throw new NotImplementedException();
-        }
-
-        public T Deserialize<T>(Dictionary<string, object> raw) where T : ModelBase, new()
-        {
-            T model = new T();
-            model.Pack(raw);
-            return model;
         }
 
         public T Get<T>(string whereClause) where T : ModelBase
@@ -96,11 +89,6 @@ namespace seal.Base
         public void Post<T>(T model) where T : ModelTable
         {
            
-        }
-
-        public Dictionary<string, object> Serialize<T>(T table) where T : ModelTable
-        {
-            return table.Unpack();
         }
 
         public void Sync()

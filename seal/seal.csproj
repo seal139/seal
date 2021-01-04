@@ -68,10 +68,10 @@
     <Compile Include="Interface\IData.cs" />
     <Compile Include="Interface\IDataGeneric.cs" />
     <Compile Include="Interface\IMapping.cs" />
-    <Compile Include="Interface\IModelConverter.cs" />
     <Compile Include="Interface\IModel.cs" />
     <Compile Include="Interface\ISerialization.cs" />
     <Compile Include="Interface\IValidation.cs" />
+    <Compile Include="IntfImpl\Serializer.cs" />
     <Compile Include="IntfImpl\SQLServerDataConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Transcator.cs" />

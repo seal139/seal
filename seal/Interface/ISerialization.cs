@@ -18,7 +18,7 @@ namespace seal.Interface
         /// <typeparam name="T">Model type</typeparam>
         /// <param name="table">Obect</param>
         /// <returns>Dictionary that represent Column name and it's value</returns>
-        Dictionary<string, object> Serialize<T>(T table) where T : ModelTable;
+        Dictionary<string, object> Serialize<T>(T table) where T : IModelConverter;
 
         /// <summary>
         /// [Method definition] Convert raw data to Model object
@@ -26,6 +26,6 @@ namespace seal.Interface
         /// <typeparam name="T">Model type</typeparam>
         /// <param name="raw">Raw data</param>
         /// <returns>Instance of Model</returns>
-        T Deserialize<T>(Dictionary<string, object> raw) where T : ModelBase, new();
+        T Deserialize<T>(Dictionary<string, object> raw) where T : IModelConverter, new();
     }
 }

@@ -1,4 +1,5 @@
-﻿using seal.Helper;
+﻿using seal.Enumeration;
+using seal.Helper;
 using seal.Interface;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace seal.Base
         public ModelBase()
         {
             isInitialized = false;
-            mode = Operation.INSERT;
+            mode = Operation.Insert;
         }
 
         /// <summary>
@@ -41,7 +42,7 @@ namespace seal.Base
                 p.SetValue(this, keyValue.Value);
             }
 
-            mode = Operation.UPDATE;
+            mode = Operation.Update;
             isInitialized = true;
         }
 
