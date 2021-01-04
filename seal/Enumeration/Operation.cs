@@ -2,6 +2,6 @@
 {
     public enum Operation
     {
-        Insert, Update, Delete,
+        Insert, Update, Delete, SELECT,
     }
 }

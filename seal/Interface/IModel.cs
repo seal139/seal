@@ -31,7 +31,7 @@ namespace seal.Interface
         /// [Method definition] Return unique column and its value for row identification <br/>
         /// This field usually return column ID
         /// </summary>
-        KeyValuePair<string, string> UniqueIdentifier { get; }
+        string UniqueIdentifier { get; }
 
         /// <summary>
         /// [Method definition] Fill every field on Model from raw Dictionary
@@ -44,5 +44,12 @@ namespace seal.Interface
         /// </summary>
         /// <returns></returns>
         Dictionary<string, object> Unpack();
+
+        /// <summary>
+        /// Link relation field to another model object
+        /// </summary>
+        /// <param name="field">Field name</param>
+        /// <param name="value">Instance value</param>
+        void SetJoinedObjValue(string field, object value);
     }
 }

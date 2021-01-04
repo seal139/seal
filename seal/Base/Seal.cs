@@ -1,4 +1,5 @@
 ﻿using seal.Attributes;
+using seal.Enumeration;
 using seal.Helper;
 using seal.Interface;
 using System;
@@ -12,29 +13,30 @@ using FieldInfo = seal.Helper.FieldInfo;
 
 namespace seal.Base
 {
-    public class API : IApi
+    public class Seal : IApi
     {
-        public static API GetInstance()
+
+        public static Seal GetInstance()
         {
-
+            if (!initialized)
+            {
+                instance = new Seal();
+                initialized = true;
+            }
+            return instance;
         }
+        private static Seal instance = null;
+        private static bool initialized = false;
 
-        private List<string> queryBuffer;
-
-        public void Delete<T>(string whereClause) where T : ModelTable
+        private Seal()
         {
-            throw new NotImplementedException();
+            queryBuffer = new List<string>();
         }
+        private IList<string> queryBuffer;
+        
 
-        public T Get<T>(string whereClause) where T : ModelBase
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Get<T>() where T : ModelBase
-        {
-            throw new NotImplementedException();
-        }
+        public ISerialization Serializer { get; set; }
+        public IData DbDriver { get; set; }
 
         public void Init<T>() where T : ModelBase
         {
@@ -82,16 +84,60 @@ namespace seal.Base
 
                 tbl[info.Name] = ci;
             }
-
-
         }
 
         public void Post<T>(T model) where T : ModelTable
         {
-           
+            queryBuffer.Add(DbDriver.CompileQuery(model.Mode, model.Unpack(), model.UniqueIdentifier));
         }
 
         public void Sync()
+        {
+            DbDriver.Open();
+            foreach(string query in queryBuffer)
+            {
+                DbDriver.TransactPost(query);
+            }
+            DbDriver.Close();
+        }
+
+        public void Post<T>(T[] model) where T : ModelTable
+        {
+            foreach (T obj in model)
+            {
+                queryBuffer.Add(DbDriver.CompileQuery(obj.Mode, obj.Unpack(), obj.UniqueIdentifier));
+            }
+        }
+
+        public void Delete<T>(T model) where T : ModelTable
+        {
+           queryBuffer.Add(DbDriver.CompileQuery(Operation.Delete, model.Unpack(), model.UniqueIdentifier));
+        }
+
+        public void Delete<T>(T[] model) where T : ModelTable
+        {
+            foreach(T obj in model)
+            {
+                queryBuffer.Add(DbDriver.CompileQuery(Operation.Delete, obj.Unpack(), obj.UniqueIdentifier));
+            }
+        }
+
+        public void Delete<T>(string whereClause) where T : ModelTable
+        {
+            queryBuffer.Add(DbDriver.CompileQuery(Operation.Delete, null, null) + " " +  whereClause);
+        }
+
+        public T[] FindList<T>(string whereClause) where T : ModelBase
+        {
+            throw new NotImplementedException();
+        }
+
+        public T Find<T>(string whereClause) where T : ModelBase
+        {
+            throw new NotImplementedException();
+        }
+
+        public T[] ListAll<T>() where T : ModelBase
         {
             throw new NotImplementedException();
         }

@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Attributes\Column.cs" />
     <Compile Include="Attributes\Entity.cs" />
-    <Compile Include="Base\API.cs" />
+    <Compile Include="Base\Seal.cs" />
     <Compile Include="Base\Data.cs" />
     <Compile Include="Base\ModelBase.cs" />
     <Compile Include="Base\ModelTable.cs" />
@@ -58,7 +58,6 @@
     <Compile Include="Enumeration\Operation.cs" />
     <Compile Include="Helper\Error.cs" />
     <Compile Include="Helper\APIException.cs" />
-    <Compile Include="Base\ExpressionBuilder.cs" />
     <Compile Include="Helper\FieldInfo.cs" />
     <Compile Include="Helper\GenericGetterSetter.cs" />
     <Compile Include="Helper\ModelFactory.cs" />

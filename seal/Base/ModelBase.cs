@@ -11,14 +11,19 @@ using FieldInfo = seal.Helper.FieldInfo;
 
 namespace seal.Base
 {
-    public abstract class ModelBase : IModel, IModelConverter
+    public abstract class ModelBase : IModel
     {
-        public abstract bool Joined { get; }
-        public bool Initialized { get; }
+        public bool Joined { get { return join; } }
+        public bool Initialized { get { return isInitialized; } }
         public Operation Mode { get { return mode; } }
+
+
+
+        public abstract string UniqueIdentifier{get;}
 
         protected internal bool isInitialized;
         protected internal Operation mode;
+        protected internal bool join;
 
         public ModelBase()
         {
@@ -44,6 +49,20 @@ namespace seal.Base
 
             mode = Operation.Update;
             isInitialized = true;
+        }
+
+        /// <summary>
+        /// File joined table instance to field that marked foreign key
+        /// </summary>
+        /// <param name="fieldName"></param>
+        /// <param name="value"></param>
+        public virtual void SetJoinedObjValue(string fieldName, object value)
+        {
+            join = true;
+            TableInfo ti = GetTableInfo();
+            FieldInfo field = ti[fieldName];
+            PropertyInfo p = field.MethodDelegates;
+            p.SetValue(this, value);
         }
 
         /// <summary>
