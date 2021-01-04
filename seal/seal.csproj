@@ -66,7 +66,6 @@
     <Compile Include="Helper\TableInfo.cs" />
     <Compile Include="Interface\IApi.cs" />
     <Compile Include="Interface\IData.cs" />
-    <Compile Include="Interface\IDataGeneric.cs" />
     <Compile Include="Interface\IMapping.cs" />
     <Compile Include="Interface\IModel.cs" />
     <Compile Include="Interface\ISerialization.cs" />
@@ -84,7 +83,7 @@
     <Folder Include="BaseImpl\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram2.cd" />
+    <None Include="Diagram\Interface.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

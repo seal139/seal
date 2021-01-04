@@ -8,7 +8,11 @@ using System.Threading.Tasks;
 
 namespace seal.IntfImpl
 {
-    public class Serializer : ISerialization
+    /// <summary>
+    /// Provide serialization mechanism between raw data and object model <br/>
+    /// This singleton class cannot be inherited.
+    /// </summary>
+    public sealed class Serializer : ISerialization
     {
         private static bool initialized = false;
         private static Serializer instance = null;
@@ -22,13 +26,15 @@ namespace seal.IntfImpl
             return instance;
         }
 
+        private Serializer() { }
+
         /// <summary>
         /// Serialize class to Raw format
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="table"></param>
         /// <returns></returns>
-        public Dictionary<string, object> Serialize<T>(T table) where T : IModelConverter
+        public Dictionary<string, object> Serialize<T>(T table) where T : IModel
         {
             ModelFactory factory = ModelFactory.GetInstance();
             TableInfo tInfo = factory[typeof(T).Name];
@@ -48,7 +54,7 @@ namespace seal.IntfImpl
         /// <typeparam name="T"></typeparam>
         /// <param name="raw"></param>
         /// <returns></returns>
-        public T Deserialize<T>(Dictionary<string, object> raw) where T : IModelConverter, new()
+        public T Deserialize<T>(Dictionary<string, object> raw) where T : IModel, new()
         {
             T obj = new T();
             obj.Pack(raw);

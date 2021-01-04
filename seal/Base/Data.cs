@@ -1,4 +1,5 @@
-﻿using seal.Helper;
+﻿using seal.Enumeration;
+using seal.Helper;
 using seal.Interface;
 using System;
 using System.Collections.Generic;
@@ -52,9 +53,11 @@ namespace seal.Base
         /// <summary>
         /// Create query from raw data format
         /// </summary>
+        /// <param name="operation"></param>
         /// <param name="raw"></param>
+        /// <param name="uniqueIdentifierField"></param>
         /// <returns></returns>
-        public abstract string CompileQuery(Operation operation, Dictionary<string, object> raw);
+        public abstract string CompileQuery(Operation operation, Dictionary<string, object> raw, string uniqueIdentifierField);
 
         protected abstract void Dispose(bool disposing);
 

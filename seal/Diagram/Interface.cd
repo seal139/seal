@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="seal.Interface.IApi">
+    <Position X="7.25" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACCAAEAAAAAACAEIAAAAAAECQAAAAAA=</HashCode>
+      <FileName>Interface\IApi.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IData">
+    <Position X="7.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAIAEAAAAAAAAAAAAAIABAAAAAAACAAAA=</HashCode>
+      <FileName>Interface\IData.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IMapping">
+    <Position X="12.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\IMapping.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IModel">
+    <Position X="4.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAIAAAAQAABAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Interface\IModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.ISerialization">
+    <Position X="9.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACBAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\ISerialization.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="seal.Interface.IValidation">
+    <Position X="4.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAgAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\IValidation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

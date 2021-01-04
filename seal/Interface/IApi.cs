@@ -12,6 +12,7 @@ namespace seal.Interface
     /// </summary>
     public interface IApi
     {
+
         /// <summary>
         /// [Method definition] INSERT or UPDATE operation
         /// </summary>
@@ -81,5 +82,15 @@ namespace seal.Interface
         /// [Method definition] Synchronize operation to database
         /// </summary>
         void Sync();
+
+        /// <summary>
+        /// [Property Definition] Hold object instance that do serialization job for Model
+        /// </summary>
+        ISerialization Serializer { set; get; }
+
+        /// <summary>
+        /// [Property Definition] Hold object instance that do database transaction
+        /// </summary>
+        IData DbDriver { set; get; }
     }
 }

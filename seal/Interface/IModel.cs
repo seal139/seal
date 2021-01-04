@@ -28,6 +28,12 @@ namespace seal.Interface
         Operation Mode { get; }
 
         /// <summary>
+        /// [Method definition] Return unique column and its value for row identification <br/>
+        /// This field usually return column ID
+        /// </summary>
+        KeyValuePair<string, string> UniqueIdentifier { get; }
+
+        /// <summary>
         /// [Method definition] Fill every field on Model from raw Dictionary
         /// </summary>
         /// <param name="values"></param>

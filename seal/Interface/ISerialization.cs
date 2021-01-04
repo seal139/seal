@@ -10,7 +10,7 @@ namespace seal.Interface
     /// <summary>
     /// Define mechanism for converting object to raw form and vice versa
     /// </summary>
-    interface ISerialization
+    public interface ISerialization
     {
         /// <summary>
         /// [Method definition] Convert model to raw form
@@ -18,7 +18,7 @@ namespace seal.Interface
         /// <typeparam name="T">Model type</typeparam>
         /// <param name="table">Obect</param>
         /// <returns>Dictionary that represent Column name and it's value</returns>
-        Dictionary<string, object> Serialize<T>(T table) where T : IModelConverter;
+        Dictionary<string, object> Serialize<T>(T table) where T : IModel;
 
         /// <summary>
         /// [Method definition] Convert raw data to Model object
@@ -26,6 +26,6 @@ namespace seal.Interface
         /// <typeparam name="T">Model type</typeparam>
         /// <param name="raw">Raw data</param>
         /// <returns>Instance of Model</returns>
-        T Deserialize<T>(Dictionary<string, object> raw) where T : IModelConverter, new();
+        T Deserialize<T>(Dictionary<string, object> raw) where T : IModel, new();
     }
 }
