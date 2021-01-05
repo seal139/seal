@@ -12,22 +12,38 @@ namespace seal.Helper
 {
     public static class GenericGetterSetter
     {
-        public static Action<ModelBase, object> CreateSetter<T>(PropertyInfo propertyInfo) where T : IModel
+
+        public static Action<IModel, object> CreateSetter<T>(PropertyInfo propertyInfo) where T : IModel
         {
             ParameterExpression obj = Expression.Parameter(typeof(T), "instance");
             ParameterExpression value = Expression.Parameter(typeof(object), "value");
+            UnaryExpression body =Expression.Convert( Expression.Assign(Expression.Property(obj, propertyInfo.Name), Expression.Convert(value, propertyInfo.PropertyType)), typeof(IModel));
 
-            BinaryExpression body = Expression.Assign(Expression.Property(obj, propertyInfo.Name), value);
-            return Expression.Lambda<Action<ModelBase, object>>(body, obj, value).Compile();
+            var q =  Expression.Lambda<Action<T, Object>>(body, obj, value).Compile();
+            return ConvertSetter<T>(q);
+
         }
 
-        public static Func<ModelBase, object> CreateGetter<T>(string name) where T : IModel
+        public static Func<IModel, object> CreateGetter<T>(string name) where T : IModel
         {
             ParameterExpression instance = Expression.Parameter(typeof(T), "instance");
 
-            var body = Expression.Property(instance, name);
+            var body = Expression.Convert(Expression.Property(instance, name), typeof(IModel));
 
-            return Expression.Lambda<Func<ModelBase, object>>(body, instance).Compile();
+            var q = Expression.Lambda<Func<T, object>>(body, instance).Compile();
+            return ConvertGetter<T>(q);
+        }
+
+        private static Action<IModel, object> ConvertSetter<T>(Action<T, object> myActionT)
+        {
+            if (myActionT == null) return null;
+            else return new Action<IModel, object>((o, p) => myActionT((T)o, p));
+        }
+
+        private static Func<IModel, object> ConvertGetter<T>(Func<T, object> myActionT)
+        {
+            if (myActionT == null) return null;
+            else return new Func<IModel, object>(o => myActionT((T)o));
         }
     }
 }

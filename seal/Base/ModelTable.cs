@@ -1,4 +1,6 @@
-﻿using seal.Helper;
+﻿using seal.Attributes;
+using seal.Enumeration;
+using seal.Helper;
 using seal.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,8 +12,9 @@ using FieldInfo = seal.Helper.FieldInfo;
 
 namespace seal.Base
 {
-    public abstract class ModelTable : ModelBase, IValidation
+    public class ModelTable : ModelBase
     {
+        public override JoinMode RelationJoinMode { get { return JoinMode.Once; } }
 
         public static implicit operator ModelTable(int id)
         {
@@ -32,12 +35,17 @@ namespace seal.Base
             isInitialized = true;
         }
 
-        public abstract void ValidateOnDelete(Error error);
-        public abstract void ValidateOnInsert(Error error);
-        public abstract void ValidateOnUpdate(Error error);
+        [Column("Id")]
+        public int Id { get; set; }
 
-        public int Id { get; internal set; }
+        [Column("Created")]
         public DateTime Created { get; set; }
+
+        [Column("LastModified")]
         public DateTime LastModified { get; set; }
+
+        public override string UniqueIdentifier { get{ return "Id"; } }
+
+        public override string UniqueIdentifierValue { get { return Id.ToString(); } }
     }
 }

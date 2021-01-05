@@ -29,8 +29,8 @@ namespace seal.Helper
         /// </summary>
         public PropertyInfo MethodDelegates { set; get; }
 
-        public Action<ModelBase, object> Setter { get; set; }
-        public Func<ModelBase, object> Getter { set; get; }
+        public Action<IModel, object> Setter { get; set; }
+        public Func<IModel, object> Getter { set; get; }
 
         /// <summary>
         /// Flag field as foreign key

@@ -1,4 +1,8 @@
 ﻿
+using seal.Attributes;
+using seal.Base;
+using seal.Interface;
+using seal.IntfImpl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,25 +15,37 @@ namespace test
 {
     class Program
     {
-        void qwee()
+        [Entity("Employee")]
+        public class Employee : ModelTable
         {
-
+            [Column("Code")] public string Code { get; set; }
+            [Column("Name")] public string Name { get; set; }
+            [Column("NickName")] public string NickName { get; set; }
         }
+
 
         static void Main(string[] args)
         {
-            test q = new test();
-            q.qq = "sep";
+            ISerialization serializer = Serializer.Instance;
+            IApi api = Seal.GetInstance();
 
-            ParameterExpression arg = Expression.Parameter(typeof(test), "x");
-            Expression expr = Expression.Property(arg,"qq");
-            
+            api.Init<Employee>();
 
-            var propertyResolver = Expression.Lambda<Func<test, object>>(expr, arg).Compile();
-            Expression.Assign(expr, 
-            propertyResolver(q)
-            Console.WriteLine(propertyResolver(q));
-            Console.ReadLine();
+            api.Serializer = serializer;
+
+            Employee obj = new Employee();
+            obj.Id = 1;
+            obj.LastModified = DateTime.Now;
+            obj.Created = DateTime.Now;
+            obj.Name = "Septian";
+            obj.NickName = "Ian";
+            obj.Code = "Seal";
+
+
+
+            IDictionary<string, object> raw =  serializer.Serialize<Employee>(obj);
+            Console.WriteLine("ob");
+
 
             //Employee.InitMapping<Employee>();
 

@@ -16,7 +16,7 @@ namespace seal.Base
         public bool Joined { get { return join; } }
         public bool Initialized { get { return isInitialized; } }
         public Operation Mode { get { return mode; } }
-        public JoinMode RelationJoinMode { get { return JoinMode.Once; } }
+        public abstract JoinMode RelationJoinMode { get; }
 
 
 

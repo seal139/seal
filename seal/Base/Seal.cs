@@ -72,7 +72,7 @@ namespace seal.Base
                     if (info.CanRead && info.CanWrite)
                     {
                         ci.MethodDelegates = info;
-                        ci.Setter = GenericGetterSetter.CreateSetter<T>(info);
+                        ci.Setter =GenericGetterSetter.CreateSetter<T>(info);
                         ci.Getter = GenericGetterSetter.CreateGetter<T>(info.Name);
 
                         if (info.PropertyType.IsSubclassOf(typeof(ModelTable)))
@@ -89,7 +89,24 @@ namespace seal.Base
                 }
 
                 tbl[info.Name] = ci;
+
+                
             }
+
+            ModelFactory mf = ModelFactory.GetInstance();
+            mf[tbl.Name] = tbl;
+        }
+
+        private Action<IModel, object> ConvertSetter<T>(Action<T, object> myActionT)
+        {
+            if (myActionT == null) return null;
+            else return new Action<IModel, object>((o,p) => myActionT((T)o, p));
+        }
+
+        private Func<IModel, object> ConvertGetter<T>(Func<T, object> myActionT)
+        {
+            if (myActionT == null) return null;
+            else return new Func<IModel, object>(o => myActionT((T)o));
         }
 
         public void Post<T>(T model) where T : IModel
