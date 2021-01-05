@@ -1,6 +1,7 @@
 ﻿using seal.Enumeration;
 using seal.Helper;
 using seal.Interface;
+using seal.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,60 +53,6 @@ namespace seal.IntfImpl
             return obj;
         }
 
-        public override string CompileQuery(Operation operation, string tableName, Dictionary<string, object> raw)
-        {
-            bool first = true;
-            string query = "";
-
-            switch (operation)
-            {
-
-                case Operation.Insert:
-                    string column = "(";
-                    string value = ") VALUES (";
-
-                    foreach (KeyValuePair<string, object> keyVal in raw)
-                    {
-                        if (!first)
-                        {
-                            column += ", ";
-                            value += ", ";
-                        }
-
-                        first = false;
-                        column += keyVal.Key;
-                        value += ValueConverter(keyVal.Value);
-                    }
-
-                    query += column + value + ")";
-                    break;
-
-                case Operation.Update:
-                    query = " SET ";
-
-                    foreach (KeyValuePair<string, object> keyVal in raw)
-                    {
-                        if (!first)
-                        {
-                            query += ", ";
-                        }
-                        first = false;
-                        query += keyVal.Key + " = " + ValueConverter(keyVal.Value);
-
-                    }
-                    break;
-
-                case Operation.Delete:
-                    query = "DELETE FROM " + typeof(T).Name + " WHERE id = '" + ((Model)entity).Id.ToString() + "'";
-                    break;
-
-                default:
-                    throw new ApiException("Invalid SQL operation");
-
-            }
-            return query;
-        }
-
         private string ValueConverter(object value)
         {
             if (value.GetType().IsSubclassOf(typeof(DateTime)) || value is DateTime)
@@ -136,9 +83,9 @@ namespace seal.IntfImpl
                 return "0";
             }
 
-            if (value.GetType().IsSubclassOf(typeof(ModelTable)) || value is ModelTable)
+            if (value.GetType().IsSubclassOf(typeof(IModel)) || value is IModel)
             {
-                return ((ModelTable)value).Id.ToString();
+                return ((IModel)value).UniqueIdentifierValue;
             }
 
             if (value.GetType().IsSubclassOf(typeof(Enum)))
@@ -147,6 +94,76 @@ namespace seal.IntfImpl
             }
 
             throw new ApiException("Invalid value for invoking to database");
+        }
+
+        public string CompileQuery(Operation operation, String table, IDictionary<string, object> raw, string uniqueIdentifierField)
+        {
+            bool first = true;
+            string query = "";
+
+            switch (operation)
+            {
+
+                case Operation.Insert:
+                    query = "INSERT INTO " + table + " ";
+
+                    string column = "(";
+                    string value = ") VALUES (";
+
+                    foreach (KeyValuePair<string, object> keyVal in raw)
+                    {
+                        if (!first)
+                        {
+                            column += ", ";
+                            value += ", ";
+                        }
+
+                        first = false;
+                        column += keyVal.Key;
+                        value += ValueConverter(keyVal.Value);
+                    }
+
+                    query += column + value + ")";
+                    break;
+
+                case Operation.Update:
+                    query = "UPDATE " + table + " SET ";
+
+                    foreach (KeyValuePair<string, object> keyVal in raw)
+                    {
+                        if (!first)
+                        {
+                            query += ", ";
+                        }
+                        first = false;
+                        query += keyVal.Key + " = " + ValueConverter(keyVal.Value);
+
+                    }
+                    break;
+
+                case Operation.Delete:
+                    query = "DELETE FROM " + table + " WHERE " + uniqueIdentifierField + " = " + raw[uniqueIdentifierField];
+                    break;
+
+                case Operation.SELECT:
+                    query = "SELECT ";
+                    foreach (KeyValuePair<string, object> keyVal in raw)
+                    {
+                        if (!first)
+                        {
+                            query += ", ";
+                        }
+                        first = false;
+                        query += keyVal.Key;
+                    }
+
+                    query += "FROM " + table;
+                    break;
+
+                default:
+                    throw new ApiException("Invalid SQL operation");
+            }
+            return query;
         }
     }
 }

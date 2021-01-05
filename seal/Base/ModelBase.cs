@@ -16,10 +16,12 @@ namespace seal.Base
         public bool Joined { get { return join; } }
         public bool Initialized { get { return isInitialized; } }
         public Operation Mode { get { return mode; } }
+        public JoinMode RelationJoinMode { get { return JoinMode.Once; } }
 
 
 
         public abstract string UniqueIdentifier{get;}
+        public abstract string UniqueIdentifierValue { get; }
 
         protected internal bool isInitialized;
         protected internal Operation mode;
@@ -36,7 +38,7 @@ namespace seal.Base
         /// Override this method with native code for better performance
         /// </summary>
         /// <param name="values">Mapping column name - value</param>
-        public virtual void Pack(Dictionary<string, object> values)
+        public virtual void Pack(IDictionary<string, object> values)
         {
             TableInfo ti = GetTableInfo();
 
@@ -70,7 +72,7 @@ namespace seal.Base
         /// Override this method with native code for better performance
         /// </summary>
         /// <returns>Mapping column name - value</returns>
-        public virtual Dictionary<string, object> Unpack()
+        public virtual IDictionary<string, object> Unpack()
         {
             TableInfo ti = GetTableInfo();
 

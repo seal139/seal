@@ -33,10 +33,16 @@ namespace seal.Interface
         JoinMode RelationJoinMode { get; }
 
         /// <summary>
-        /// [Method definition] Return unique column and its value for row identification <br/>
+        /// [Method definition] Return unique column row identification <br/>
         /// This field usually return column ID
         /// </summary>
         string UniqueIdentifier { get; }
+
+        /// <summary>
+        /// [Method definition] Return unique column value for row identification <br/>
+        /// This field usually return column ID
+        /// </summary>
+        string UniqueIdentifierValue { get; }
 
         /// <summary>
         /// [Method definition] Fill every field on Model from raw Dictionary

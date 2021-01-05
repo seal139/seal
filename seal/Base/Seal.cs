@@ -38,7 +38,7 @@ namespace seal.Base
         public ISerialization Serializer { get; set; }
         public IData DbDriver { get; set; }
 
-        public void Init<T>() where T : ModelBase
+        public void Init<T>() where T : IModel
         {
             TableInfo tbl = new TableInfo();
             tbl.FieldName = typeof(T).Name;
@@ -49,16 +49,22 @@ namespace seal.Base
             {
                 object[] attrs = info.GetCustomAttributes(true);
                 FieldInfo ci = new FieldInfo();
-                ci.FieldName = info.Name;
                 ci.Name = info.Name;
 
+                bool isField = false;
                 foreach (object attr in attrs)
                 {
                     Column columnName = attr as Column;
                     if (columnName != null)
                     {
-                        ci.Name = columnName.ColumnName;
+                        ci.FieldName = columnName.ColumnName;
+                        isField = true;
                     }
+                }
+
+                if (!isField)
+                {
+                    continue;
                 }
 
                 if (!info.PropertyType.IsArray)
@@ -86,9 +92,9 @@ namespace seal.Base
             }
         }
 
-        public void Post<T>(T model) where T : ModelTable
+        public void Post<T>(T model) where T : IModel
         {
-            queryBuffer.Add(DbDriver.CompileQuery(model.Mode, model.Unpack(), model.UniqueIdentifier));
+            queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
         }
 
         public void Sync()
@@ -101,45 +107,57 @@ namespace seal.Base
             DbDriver.Close();
         }
 
-        public void Post<T>(T[] model) where T : ModelTable
+        public void Post<T>(T[] model) where T : IModel
         {
             foreach (T obj in model)
             {
-                queryBuffer.Add(DbDriver.CompileQuery(obj.Mode, obj.Unpack(), obj.UniqueIdentifier));
+                queryBuffer.Add(Serializer.CompileQuery(obj.Mode, typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
             }
         }
 
-        public void Delete<T>(T model) where T : ModelTable
+        public void Delete<T>(T model) where T : IModel
         {
-           queryBuffer.Add(DbDriver.CompileQuery(Operation.Delete, model.Unpack(), model.UniqueIdentifier));
+           queryBuffer.Add(Serializer.CompileQuery(Operation.Delete, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
         }
 
-        public void Delete<T>(T[] model) where T : ModelTable
+        public void Delete<T>(T[] model) where T : IModel
         {
             foreach(T obj in model)
             {
-                queryBuffer.Add(DbDriver.CompileQuery(Operation.Delete, obj.Unpack(), obj.UniqueIdentifier));
+                queryBuffer.Add(Serializer.CompileQuery(Operation.Delete,typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
             }
         }
 
-        public void Delete<T>(string whereClause) where T : ModelTable
+        public void Delete<T>(string whereClause) where T : IModel
         {
-            queryBuffer.Add(DbDriver.CompileQuery(Operation.Delete, null, null) + " " +  whereClause);
+            queryBuffer.Add(Serializer.CompileQuery(Operation.Delete, typeof(T).Name, null, null) + " " +  whereClause);
         }
 
-        public T[] FindList<T>(string whereClause) where T : ModelBase
+        public T[] FindList<T>(string whereClause) where T : IModel
         {
             throw new NotImplementedException();
         }
 
-        public T Find<T>(string whereClause) where T : ModelBase
+        public T Find<T>(string whereClause) where T : IModel
         {
             throw new NotImplementedException();
         }
 
-        public T[] ListAll<T>() where T : ModelBase
+        public T[] ListAll<T>() where T : IModel
         {
             throw new NotImplementedException();
         }
+
+        //private void GetFieldRcrv(string t, ref Dictionary<string, int> selectedTable, int index, ref Dictionary<string, Dictionary<string, int>> columnMapping, ref int colIndex)
+        //{
+        //    selectedTable.Add(t, index);
+        //    Dictionary<string, Tuple<string, PropertyInfo>> fieldList = DataFactory.GetClassInfo(t);
+        //    Dictionary<string, int> columnValMapping = new Dictionary<string, int>();
+        //    foreach (KeyValuePair<string, Tuple<string, PropertyInfo>> column in fieldList)
+        //    {
+        //        columnValMapping.Add(column.Key, ++colIndex);
+        //    }
+        //    columnMapping.Add(t, columnValMapping);
+        //}
     }
 }

@@ -1,4 +1,5 @@
 ﻿using seal.Base;
+using seal.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace seal.Helper
 {
     public static class GenericGetterSetter
     {
-        public static Action<ModelBase, object> CreateSetter<T>(PropertyInfo propertyInfo) where T : ModelBase
+        public static Action<ModelBase, object> CreateSetter<T>(PropertyInfo propertyInfo) where T : IModel
         {
             ParameterExpression obj = Expression.Parameter(typeof(T), "instance");
             ParameterExpression value = Expression.Parameter(typeof(object), "value");
@@ -20,7 +21,7 @@ namespace seal.Helper
             return Expression.Lambda<Action<ModelBase, object>>(body, obj, value).Compile();
         }
 
-        public static Func<ModelBase, object> CreateGetter<T>(string name) where T : ModelBase
+        public static Func<ModelBase, object> CreateGetter<T>(string name) where T : IModel
         {
             ParameterExpression instance = Expression.Parameter(typeof(T), "instance");
 
