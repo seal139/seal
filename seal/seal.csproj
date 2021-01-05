@@ -46,7 +46,6 @@
     <Compile Include="Attributes\Column.cs" />
     <Compile Include="Attributes\Entity.cs" />
     <Compile Include="Base\Seal.cs" />
-    <Compile Include="Base\Data.cs" />
     <Compile Include="Base\ModelBase.cs" />
     <Compile Include="Base\ModelTable.cs" />
     <Compile Include="Base\ModelView.cs" />
@@ -54,6 +53,7 @@
     <Compile Include="DataApi.cs" />
     <Compile Include="Class2.cs" />
     <Compile Include="DataFactory.cs" />
+    <Compile Include="Enumeration\JoinMode.cs" />
     <Compile Include="Enumeration\LogicalOperator.cs" />
     <Compile Include="Enumeration\Operation.cs" />
     <Compile Include="Helper\Error.cs" />

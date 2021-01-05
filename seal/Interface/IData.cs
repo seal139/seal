@@ -24,7 +24,7 @@ namespace seal.Interface
         /// </summary>
         /// <param name="query">Query string</param>
         /// <returns>List of rows (List of value for each column)</returns>
-        List<List<object>> TransactGet(string query);
+        IList<IList<object>> TransactGet(string query);
 
         /// <summary>
         /// [Method definition] Set database
@@ -46,14 +46,7 @@ namespace seal.Interface
         /// </summary>
         void Close();
 
-        /// <summary>
-        /// Create CRUD query
-        /// </summary>
-        /// <param name="operation">CRUD Operation</param>
-        /// <param name="raw">Raw data</param>
-        /// <param name="uniqueIdentifierField">Primary field</param>
-        /// <returns></returns>
-        string CompileQuery(Operation operation, Dictionary<string, object> raw, string uniqueIdentifierField);
+     
 
     }
 }

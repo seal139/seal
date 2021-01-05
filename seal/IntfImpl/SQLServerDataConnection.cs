@@ -1,6 +1,7 @@
 ﻿using seal.Base;
 using seal.Enumeration;
 using seal.Helper;
+using seal.Interface;
 using seal.Utils;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace seal.IntfImpl
     /// <summary>
     /// Provide basic CRUD operation for SQL Server
     /// </summary>
-    public class SQLServerDataConnection : Data
+    public class SQLServerDataConnection : IData, IDisposable
     {
         /// <summary>
         /// Create connection string
@@ -42,6 +43,17 @@ namespace seal.IntfImpl
 
         private SqlConnection con;
         private SqlCommand com;
+        private bool disposedValue;
+
+        /// <summary>
+        /// Database name
+        /// </summary>
+        public string Database { get; set; }
+
+        /// <summary>
+        /// Connection string URL
+        /// </summary>
+        public string Connection { get; set; }
 
         /// <summary>
         ///  Construct SQL Server Connection object
@@ -49,6 +61,7 @@ namespace seal.IntfImpl
         /// <param name="connectionString">Connection string URL</param>
         public SQLServerDataConnection(string connectionString)
         {
+            Connection = connectionString;
             con = new SqlConnection(connectionString);
             com = new SqlCommand();
             com.Connection = con;
@@ -67,7 +80,7 @@ namespace seal.IntfImpl
         /// <summary>
         /// Close connection
         /// </summary>
-        public override void Close()
+        public void Close()
         {
             con.Close();
         }
@@ -75,8 +88,9 @@ namespace seal.IntfImpl
         /// <summary>
         /// Open connection
         /// </summary>
-        public override void Open()
+        public void Open()
         {
+            con.ConnectionString = Connection;
             con.Open();
         }
 
@@ -85,17 +99,17 @@ namespace seal.IntfImpl
         /// </summary>
         /// <param name="query">Query string</param>
         /// <returns>List of row(List of value for each column)</returns>
-        public override List<List<object>> TransactGet(string query)
+        public IList<IList<object>> TransactGet(string query)
         {       
             try
             {
-                List<List<object>> valueRead = new List<List<object>>();
+                IList<IList<object>> valueRead = new List<IList<object>>();
                 com.CommandText = query;
 
                 SqlDataReader reader = com.ExecuteReader();
                 while (reader.Read())
                 {
-                    List<object> row = new List<object>();
+                    IList<object> row = new List<object>();
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
                         row.Add(reader[i].ToString());
@@ -117,7 +131,7 @@ namespace seal.IntfImpl
         /// </summary>
         /// <param name="query">Query string</param>
         /// <returns>True when one or more row(s) affected</returns>
-        public override bool TransactPost(string query)
+        public bool TransactPost(string query)
         {
             com.CommandText = query;
             int rowAffected = com.ExecuteNonQuery();
@@ -132,7 +146,7 @@ namespace seal.IntfImpl
         /// Release all resources
         /// </summary>
         /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
@@ -150,101 +164,18 @@ namespace seal.IntfImpl
             }
         }
 
-        private string ValueConverter(object value)
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~SQLServerDataConnection()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
         {
-            if (value.GetType().IsSubclassOf(typeof(DateTime)) || value is DateTime)
-            {
-                return "'" + DateTimeUtility.GetSqlFormatDate((DateTime)value) + "'";
-            }
-
-            if ((value.GetType().IsSubclassOf(typeof(long))   || value is long)   || 
-                (value.GetType().IsSubclassOf(typeof(int))    || value is int)    || 
-                (value.GetType().IsSubclassOf(typeof(short))  || value is short)  ||
-                (value.GetType().IsSubclassOf(typeof(double)) || value is double) || 
-                (value.GetType().IsSubclassOf(typeof(float))  || value is float))
-            {
-                return value.ToString();
-            }
-
-            if (value.GetType().IsSubclassOf(typeof(string)) || value is string)
-            {
-                return "'" +  value.ToString() + "'";
-            }
-
-            if (value.GetType().IsSubclassOf(typeof(bool)) || value is bool)
-            {
-                if((bool) value == true)
-                {
-                    return "1";
-                }
-                return "0";
-            }
-
-            if  (value.GetType().IsSubclassOf(typeof(ModelTable)) || value is ModelTable)
-            {
-                return ((ModelTable)value).Id.ToString();
-            }
-
-            if (value.GetType().IsSubclassOf(typeof(Enum)))
-            {
-                return ((int)value).ToString();
-            }
-
-            throw new ApiException("Invalid value for invoking to database");
-        }
-
-        public override string CompileQuery(Operation operation, string tableName, Dictionary<string, object> raw)
-        {
-            bool first = true;
-            string query = "";
-            
-            switch (operation)
-            {
-
-                case Operation.Insert:
-                    string column = "(";
-                    string value = ") VALUES (";
-
-                    foreach(KeyValuePair<string, object> keyVal in raw)
-                    {
-                        if (!first)
-                        {
-                            column += ", ";
-                            value += ", ";
-                        }
-
-                        first = false;
-                        column += keyVal.Key;
-                        value += ValueConverter(keyVal.Value);
-                    }
-
-                    query += column + value + ")";
-                    break;
-
-                case Operation.Update:
-                    query = " SET ";
-
-                    foreach (KeyValuePair<string, object> keyVal in raw)
-                    {
-                        if (!first)
-                        {
-                            query += ", ";
-                        }
-                        first = false;
-                        query += keyVal.Key + " = " + ValueConverter(keyVal.Value);
-
-                    }
-                    break;
-
-                case Operation.Delete:
-                    query = "DELETE FROM " + typeof(T).Name + " WHERE id = '" + ((Model)entity).Id.ToString() + "'";
-                    break;
-
-                default:
-                    throw new ApiException("Invalid SQL operation");
- 
-            }
-            return query;
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

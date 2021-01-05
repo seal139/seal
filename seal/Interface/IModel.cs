@@ -28,6 +28,11 @@ namespace seal.Interface
         Operation Mode { get; }
 
         /// <summary>
+        /// [Method definition] Specify how field contain another Model object
+        /// </summary>
+        JoinMode RelationJoinMode { get; }
+
+        /// <summary>
         /// [Method definition] Return unique column and its value for row identification <br/>
         /// This field usually return column ID
         /// </summary>
@@ -37,13 +42,13 @@ namespace seal.Interface
         /// [Method definition] Fill every field on Model from raw Dictionary
         /// </summary>
         /// <param name="values"></param>
-        void Pack(Dictionary<string, object> values);
+        void Pack(IDictionary<string, object> values);
 
         /// <summary>
         /// [Method definition] Convert value of every field on model to raw Dictionary
         /// </summary>
         /// <returns></returns>
-        Dictionary<string, object> Unpack();
+        IDictionary<string, object> Unpack();
 
         /// <summary>
         /// Link relation field to another model object
