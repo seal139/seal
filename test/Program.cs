@@ -1,6 +1,7 @@
 ﻿
 using seal.Attributes;
 using seal.Base;
+using seal.Helper;
 using seal.Interface;
 using seal.IntfImpl;
 using System;
@@ -23,7 +24,7 @@ namespace test
             [Column("Code")] public String Code { get; set; }
             [Column("Name")] public String Name { get; set; }
             [Column("NickName")] public String NickName { get; set; }
-            [Column("Leader")] public Employee? Leader { get; set; }
+            [Column("Leader")] public Employee Leader { get; set; }
             [Column("EmpStatus")] public Stts Status { get; set; }
             [Column("Level")] public int? Level { get; set; }
         }
@@ -41,16 +42,30 @@ namespace test
 
             api.Init<Employee>();
 
-          
+            Employee jbo = new Employee();
+            jbo.Id = 1000;
+            jbo.LastModified = DateTime.Now;
+            jbo.Created = DateTime.Now;
+            jbo.Name = "Andika";
+            jbo.NickName = null;
+            jbo.Code = "aap";
+            jbo.Leader = null;
 
-            IDictionary<string, object> des = new Dictionary<string, object>();
-            des.Add("Leader", 2);
-           
-            des.Add("Code", "foo");
-            des.Add("Name", "bar");
-            des.Add("NickName", null);
-            des.Add("Status", 0);
-            des.Add("Level", null);
+
+
+            IList<object> des = new List<object>();
+            des.Add("Code");
+            des.Add("Name");
+            des.Add("NickName");
+            des.Add(jbo);
+            des.Add(Stts.Permanent);
+            des.Add(1);
+            des.Add(123);
+            des.Add(DateTime.Now);
+            des.Add(DateTime.Now);
+
+
+
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -63,23 +78,16 @@ namespace test
             Console.WriteLine("Deserialize " + 3000000);
             Console.WriteLine("Total time: " + stopWatch.ElapsedMilliseconds + "ms");
             Console.WriteLine("Average time: " + (double)stopWatch.ElapsedMilliseconds / (double)3000000 + "ms");
-            Console.ReadLine();
 
 
-            Employee jbo = new Employee();
-            jbo.Id = 1000;
-            jbo.LastModified = DateTime.Now;
-            jbo.Created = DateTime.Now;
-            jbo.Name = "Andika";
-            jbo.NickName = null;
-            jbo.Code = "aap";
-           jbo.Leader = null;
 
 
-            IList<IDictionary<string, object>> listAll = new List<IDictionary<string, object>>();
 
-          
+            IList<IList<object>> listAll = new List<IList<object>>();
 
+
+            stopWatch = new Stopwatch();
+            stopWatch.Start();
             Employee obj = new Employee();
             obj.Id = 1;
             obj.LastModified = DateTime.Now;
@@ -91,19 +99,20 @@ namespace test
             obj.Status = 0;
             for (int i = 0; i < 3000000; i++)
             {
-               
-                IDictionary<string, object> raw = serializer.Serialize<Employee>(obj);
+
+                IList<object> raw = serializer.Serialize<Employee>(obj);
                 listAll.Add(raw);
             }
             stopWatch.Stop();
             Console.WriteLine("Serialize " + 3000000);
             Console.WriteLine("Total time: " + stopWatch.ElapsedMilliseconds + "ms");
-            Console.WriteLine("Average time: " + (double)stopWatch.ElapsedMilliseconds / (double)int.MaxValue + "ms");
+            Console.WriteLine("Average time: " + (double)stopWatch.ElapsedMilliseconds / (double)3000000 + "ms");
             Console.ReadLine();
 
+            //ModelFactory q = ModelFactory.GetInstance();
+            //TableInfo ti = q["Employee"];
 
-
-            Console.WriteLine("ob");
+            //Console.WriteLine("ob");
 
 
             //Employee.InitMapping<Employee>();

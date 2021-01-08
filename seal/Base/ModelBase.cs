@@ -42,15 +42,15 @@ namespace seal.Base
         /// Override this method with native code for better performance
         /// </summary>
         /// <returns>Mapping column name - value</returns>
-        public virtual IDictionary<string, object> Unpack()
+        public virtual IList<object> Unpack()
         {
             TableInfo ti = GetTableInfo();
 
-            Dictionary<string, object> ret = new Dictionary<string, object>();
+            IList<object> ret = new List<object>();
             foreach (KeyValuePair<string, FieldInfo> f in ti)
             {
                 Func<IModel, object> getter = f.Value.Getter;
-                ret.Add(f.Key, getter(this));
+                ret.Add(getter(this));
 
                 //object obj = f.Value.MethodDelegates.GetValue(this, null);
                 //ret.Add(f.Key, obj);
@@ -63,17 +63,17 @@ namespace seal.Base
         /// Override this method with native code for better performance
         /// </summary>
         /// <param name="values">Mapping column name - value</param>
-        public virtual void Pack(IDictionary<string, object> values)
+        public virtual void Pack(IList<object> values)
         {
             TableInfo ti = GetTableInfo();
 
-            foreach (KeyValuePair<string, object> keyValue in values)
+            foreach(KeyValuePair<string, int> indexMap in ti.GetColumnMappingIndex)
             {
-                FieldInfo field = ti[keyValue.Key];
+                FieldInfo field = ti[indexMap.Key];
                 PropertyInfo p = field.MethodDelegates;
 
-                Action<IModel, object> setter =  field.Setter;
-              
+                Action<IModel, object> setter = field.Setter;
+
                 if (p.PropertyType.GetInterfaces().Contains(typeof(IModel)))
                 {
                     ModelBase q = (ModelBase)Activator.CreateInstance(p.PropertyType);
@@ -84,9 +84,8 @@ namespace seal.Base
                 }
                 else
                 {
-                    setter(this, keyValue.Value);
+                    setter(this, values[indexMap.Value]);
                 }
-               
             }
 
             mode = Operation.Update;

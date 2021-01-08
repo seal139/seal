@@ -68,17 +68,12 @@ namespace seal.IntfImpl
         /// <typeparam name="T"></typeparam>
         /// <param name="table"></param>
         /// <returns></returns>
-        public IDictionary<string, object> Serialize<T>(T table) where T : IModel
+        public IList<object> Serialize<T>(T table) where T : IModel
         {
             ModelFactory factory = ModelFactory.GetInstance();
             TableInfo tInfo = factory[typeof(T).Name];
-            IDictionary<string, object> rawData = table.Unpack();
-            IDictionary<string, object> convertedData = new Dictionary<string, object>();
-            foreach (KeyValuePair<string, object> pair in rawData)
-            {
-                convertedData.Add(tInfo[pair.Key].FieldName, ValueConverter(pair.Value));
-            }
-            return convertedData;
+           return table.Unpack();
+           
         }
 
         /// <summary>
@@ -88,7 +83,7 @@ namespace seal.IntfImpl
         /// <typeparam name="T"></typeparam>
         /// <param name="raw"></param>
         /// <returns></returns>
-        public T Deserialize<T>(IDictionary<string, object> raw) where T : IModel, new()
+        public T Deserialize<T>(IList<object> raw) where T : IModel, new()
         {
             T obj = new T();
             obj.Pack(raw);
@@ -143,7 +138,7 @@ namespace seal.IntfImpl
             throw new ApiException("Invalid value for invoking to database");
         }
 
-        public string CompileQuery(Operation operation, String table, IDictionary<string, object> raw, string uniqueIdentifierField)
+        public string CompileQuery(Operation operation, String table, IList<object> raw, string uniqueIdentifierField)
         {
             bool first = true;
             string query = "";
@@ -189,7 +184,7 @@ namespace seal.IntfImpl
                     break;
 
                 case Operation.Delete:
-                    query = "DELETE FROM " + table + " WHERE " + uniqueIdentifierField + " = " + raw[uniqueIdentifierField];
+                    //query = "DELETE FROM " + table + " WHERE " + uniqueIdentifierField + " = " + raw[uniqueIdentifierField];
                     break;
 
                 case Operation.SELECT:

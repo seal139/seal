@@ -48,13 +48,13 @@ namespace seal.Interface
         /// [Method definition] Fill every field on Model from raw Dictionary
         /// </summary>
         /// <param name="values"></param>
-        void Pack(IDictionary<string, object> values);
+        void Pack(IList<object> values);
 
         /// <summary>
         /// [Method definition] Convert value of every field on model to raw Dictionary
         /// </summary>
         /// <returns></returns>
-        IDictionary<string, object> Unpack();
+        IList<object> Unpack();
 
         /// <summary>
         /// Link relation field to another model object

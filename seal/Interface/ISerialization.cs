@@ -20,7 +20,7 @@ namespace seal.Interface
         /// <typeparam name="T">Model type</typeparam>
         /// <param name="table">Obect</param>
         /// <returns>Dictionary that represent Column name and it's value</returns>
-        IDictionary<string, object> Serialize<T>(T table) where T : IModel;
+        IList<object> Serialize<T>(T table) where T : IModel;
 
         /// <summary>
         /// [Method definition] Convert raw data to Model object
@@ -28,7 +28,7 @@ namespace seal.Interface
         /// <typeparam name="T">Model type</typeparam>
         /// <param name="raw">Raw data</param>
         /// <returns>Instance of Model</returns>
-        T Deserialize<T>(IDictionary<string, object> raw) where T : IModel, new();
+        T Deserialize<T>(IList<object> raw) where T : IModel, new();
 
         /// <summary>
         /// [Method definition] Create compiled expression for property getter
@@ -51,6 +51,6 @@ namespace seal.Interface
         /// <param name="raw">Raw data</param>
         /// <param name="uniqueIdentifierField">Primary field</param>
         /// <returns></returns>
-        string CompileQuery(Operation operation, string table, IDictionary<string, object> raw, string uniqueIdentifierField);
+        string CompileQuery(Operation operation, string table, IList< object> raw, string uniqueIdentifierField);
     }
 }

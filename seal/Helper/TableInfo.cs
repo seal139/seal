@@ -22,6 +22,16 @@ namespace seal.Helper
         public TableInfo()
         {
             fields = new Dictionary<string, FieldInfo>();
+            columnIndexMapping = new Dictionary<string, int>();
+        }
+
+        private IDictionary<string, int> columnIndexMapping;
+
+        public IDictionary<string, int> GetColumnMappingIndex { get { return columnIndexMapping; } }
+
+        public void AddMap(string field, int index)
+        {
+            columnIndexMapping.Add(field, index);
         }
 
 

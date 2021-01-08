@@ -43,6 +43,7 @@ namespace seal.Base
             TableInfo tbl = new TableInfo();
             tbl.FieldName = typeof(T).Name;
             tbl.Name = typeof(T).Name;
+            int index = 0;
 
 
             PropertyInfo[] property_infos = (typeof(T)).GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public);
@@ -75,6 +76,7 @@ namespace seal.Base
                         ci.MethodDelegates = info;
                         ci.Setter = Serializer.CreateSetter(info);
                         ci.Getter = Serializer.CreateGetter(info);
+                        tbl.AddMap(info.Name, index++);
 
                         if (info.PropertyType.IsSubclassOf(typeof(ModelTable)))
                         {
@@ -89,9 +91,7 @@ namespace seal.Base
                     }
                 }
 
-                tbl[info.Name] = ci;
-
-                
+                tbl[info.Name] = ci;            
             }
 
             ModelFactory mf = ModelFactory.GetInstance();
@@ -112,7 +112,7 @@ namespace seal.Base
 
         public void Post<T>(T model) where T : IModel
         {
-            queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
+          //  queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
         }
 
         public void Sync()
@@ -129,20 +129,20 @@ namespace seal.Base
         {
             foreach (T obj in model)
             {
-                queryBuffer.Add(Serializer.CompileQuery(obj.Mode, typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
+               // queryBuffer.Add(Serializer.CompileQuery(obj.Mode, typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
             }
         }
 
         public void Delete<T>(T model) where T : IModel
         {
-           queryBuffer.Add(Serializer.CompileQuery(Operation.Delete, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
+          // queryBuffer.Add(Serializer.CompileQuery(Operation.Delete, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
         }
 
         public void Delete<T>(T[] model) where T : IModel
         {
             foreach(T obj in model)
             {
-                queryBuffer.Add(Serializer.CompileQuery(Operation.Delete,typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
+             //   queryBuffer.Add(Serializer.CompileQuery(Operation.Delete,typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
             }
         }
 
