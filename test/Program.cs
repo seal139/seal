@@ -43,7 +43,7 @@ namespace test
             api.Init<Employee>();
 
             Employee jbo = new Employee();
-            jbo.Id = 1000;
+            jbo.Id = 210801;
             jbo.LastModified = DateTime.Now;
             jbo.Created = DateTime.Now;
             jbo.Name = "Andika";
@@ -57,7 +57,7 @@ namespace test
             des.Add("Code");
             des.Add("Name");
             des.Add("NickName");
-            des.Add(jbo);
+            des.Add("210801");
             des.Add(Stts.Permanent);
             des.Add(1);
             des.Add(123);
@@ -72,14 +72,16 @@ namespace test
             IList<Employee> empList = new List<Employee>();
             for (int i = 0; i < 3000000; i++)
             {
-                empList.Add(serializer.Deserialize<Employee>(des));
+                Employee objt = serializer.Deserialize<Employee>(des);
+                objt.SetJoinedObjValue("Leader", jbo);
+                empList.Add(objt);
             }
             stopWatch.Stop();
             Console.WriteLine("Deserialize " + 3000000);
             Console.WriteLine("Total time: " + stopWatch.ElapsedMilliseconds + "ms");
             Console.WriteLine("Average time: " + (double)stopWatch.ElapsedMilliseconds / (double)3000000 + "ms");
 
-
+            Console.WriteLine("============");
 
 
 

@@ -1,14 +1,8 @@
-﻿using seal.Base;
-using seal.Enumeration;
-using seal.Helper;
+﻿using seal.Helper;
 using seal.Interface;
-using seal.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace seal.IntfImpl
 {
@@ -63,8 +57,10 @@ namespace seal.IntfImpl
         {
             Connection = connectionString;
             con = new SqlConnection(connectionString);
-            com = new SqlCommand();
-            com.Connection = con;
+            com = new SqlCommand
+            {
+                Connection = con
+            };
         }
 
         /// <summary>
@@ -73,8 +69,10 @@ namespace seal.IntfImpl
         public SQLServerDataConnection()
         {
             con = new SqlConnection();
-            com = new SqlCommand();
-            com.Connection = con;
+            com = new SqlCommand
+            {
+                Connection = con
+            };
         }
 
         /// <summary>
@@ -100,7 +98,7 @@ namespace seal.IntfImpl
         /// <param name="query">Query string</param>
         /// <returns>List of row(List of value for each column)</returns>
         public IList<IList<object>> TransactGet(string query)
-        {       
+        {
             try
             {
                 IList<IList<object>> valueRead = new List<IList<object>>();

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Attributes\Column.cs" />
     <Compile Include="Attributes\Entity.cs" />
+    <Compile Include="Base\ModelSecure.cs" />
     <Compile Include="Base\Seal.cs" />
     <Compile Include="Base\ModelBase.cs" />
     <Compile Include="Base\ModelTable.cs" />

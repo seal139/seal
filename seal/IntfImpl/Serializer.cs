@@ -4,11 +4,8 @@ using seal.Interface;
 using seal.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace seal.IntfImpl
 {
@@ -22,15 +19,28 @@ namespace seal.IntfImpl
 
         private Serializer() { }
 
+        public Func<IModel> CreateCtor<T>() where T : IModel
+        {
+            ConstructorInfo constructor = typeof(T).GetConstructor(new Type[] { });
+            UnaryExpression output = Expression.TypeAs(Expression.New(constructor), typeof(IModel));
+            Expression<Func<IModel>> creatorExpression = Expression.Lambda<Func<IModel>>(
+               output);
+
+
+            return creatorExpression.Compile();
+        }
+
+
+
         public Func<IModel, object> CreateGetter(PropertyInfo property)
         {
-            var parameter = Expression.Parameter(typeof(IModel), "i");
-            var cast = Expression.TypeAs(parameter, property.DeclaringType);
+            ParameterExpression parameter = Expression.Parameter(typeof(IModel), "i");
+            UnaryExpression cast = Expression.TypeAs(parameter, property.DeclaringType);
 
-            var getterBody = Expression.Property(cast, property);
-            var output = Expression.TypeAs(getterBody, typeof(object));
+            MemberExpression getterBody = Expression.Property(cast, property);
+            UnaryExpression output = Expression.TypeAs(getterBody, typeof(object));
 
-            var exp = Expression.Lambda<Func<IModel, object>>(
+            Expression<Func<IModel, object>> exp = Expression.Lambda<Func<IModel, object>>(
                 output, parameter);
 
             return exp.Compile();
@@ -38,10 +48,10 @@ namespace seal.IntfImpl
 
         public Action<IModel, object> CreateSetter(PropertyInfo property)
         {
-            var parameter = Expression.Parameter(typeof(IModel), "i");
-            var cast = Expression.TypeAs(parameter, property.DeclaringType);
+            ParameterExpression parameter = Expression.Parameter(typeof(IModel), "i");
+            UnaryExpression cast = Expression.TypeAs(parameter, property.DeclaringType);
 
-            var input = Expression.Parameter(typeof(object), "p");
+            ParameterExpression input = Expression.Parameter(typeof(object), "p");
             UnaryExpression conv;
             //if (property.PropertyType.IsSubclassOf(typeof(Enum))){
             conv = Expression.Convert(input, property.PropertyType);
@@ -52,7 +62,7 @@ namespace seal.IntfImpl
             //}
 
 
-            var prop = Expression.Property(cast, property);
+            MemberExpression prop = Expression.Property(cast, property);
 
             Action<IModel, object> result = Expression.Lambda<Action<IModel, object>>
               (
@@ -72,8 +82,8 @@ namespace seal.IntfImpl
         {
             ModelFactory factory = ModelFactory.GetInstance();
             TableInfo tInfo = factory[typeof(T).Name];
-           return table.Unpack();
-           
+            return table.Unpack();
+
         }
 
         /// <summary>
@@ -92,7 +102,7 @@ namespace seal.IntfImpl
 
         private string ValueConverter(object value)
         {
-            if(value == null)
+            if (value == null)
             {
                 return "NULL";
             }

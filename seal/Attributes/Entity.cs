@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace seal.Attributes
+﻿namespace seal.Attributes
 {
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class Entity : System.Attribute
@@ -12,7 +6,7 @@ namespace seal.Attributes
         public string TableName { set; get; }
         public Entity(string tableName)
         {
-            this.TableName = tableName;
+            TableName = tableName;
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace seal.Helper
 {
@@ -27,7 +23,7 @@ namespace seal.Helper
 
         private List<string> msg;
         private bool err;
-        private Error() 
+        private Error()
         {
             msg = new List<string>();
             err = false;
@@ -36,14 +32,8 @@ namespace seal.Helper
         /// <summary>
         /// Get error status
         /// </summary>
-        public bool HasError
-        {
-            get
-            {
-                return err;
-            }
-        }
-        
+        public bool HasError => err;
+
         /// <summary>
         /// Clear current error message <br/>
         /// This method should be called after every transaction is finished
@@ -57,13 +47,7 @@ namespace seal.Helper
         /// <summary>
         /// Get error message list
         /// </summary>
-        public List<string> MessageList
-        {
-            get
-            {
-                return msg;
-            }
-        }
+        public List<string> MessageList => msg;
 
         /// <summary>
         /// Add error message

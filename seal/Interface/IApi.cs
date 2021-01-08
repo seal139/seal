@@ -1,17 +1,10 @@
-﻿using seal.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace seal.Interface
+﻿namespace seal.Interface
 {
     /// <summary>
     /// Define mechanism for ORM Core
     /// </summary>
     public interface IApi
-    { 
+    {
         /// <summary>
         /// [Method definition] INSERT or UPDATE operation
         /// </summary>

@@ -2,9 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace seal.Helper
 {
@@ -25,9 +22,11 @@ namespace seal.Helper
             columnIndexMapping = new Dictionary<string, int>();
         }
 
+        public Func<IModel> Constructor { set; get; }
+
         private IDictionary<string, int> columnIndexMapping;
 
-        public IDictionary<string, int> GetColumnMappingIndex { get { return columnIndexMapping; } }
+        public IDictionary<string, int> GetColumnMappingIndex => columnIndexMapping;
 
         public void AddMap(string field, int index)
         {
@@ -54,8 +53,8 @@ namespace seal.Helper
         /// <returns>Field Info</returns>
         public FieldInfo this[string propertyName]
         {
-            get { return fields[propertyName]; }
-            set { fields.Add(propertyName, value); }
+            get => fields[propertyName];
+            set => fields.Add(propertyName, value);
         }
 
         public IEnumerator<KeyValuePair<string, FieldInfo>> GetEnumerator()
@@ -65,7 +64,7 @@ namespace seal.Helper
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }

@@ -4,27 +4,21 @@ using System;
 
 namespace seal.Base
 {
-    public class ModelTable : ModelBase
+    public class ModelSecure : ModelBase
     {
         public override void LazyInit(object value)
         {
-            Id = Convert.ToInt32(value);
+            UUID = (string)value;
         }
         public override JoinMode RelationJoinMode => JoinMode.Once;
-
-        internal void HasInitialized(int id)
-        {
-            Id = id;
-            isInitialized = true;
-        }
 
         //public ModelTable(int value) : base()
         //{
         //    Id = value;
         //}
 
-        [Column("Id")]
-        public int Id { get; set; }
+        [Column("UUID")]
+        public string UUID { get; set; }
 
         [Column("Created")]
         public DateTime Created { get; set; }
@@ -34,6 +28,6 @@ namespace seal.Base
 
         public override string UniqueIdentifier => "Id";
 
-        public override string UniqueIdentifierValue => Id.ToString();
+        public override string UniqueIdentifierValue => UUID;
     }
 }

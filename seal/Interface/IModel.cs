@@ -1,9 +1,5 @@
 ﻿using seal.Enumeration;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace seal.Interface
 {
@@ -61,6 +57,8 @@ namespace seal.Interface
         /// </summary>
         /// <param name="field">Field name</param>
         /// <param name="value">Instance value</param>
-        void SetJoinedObjValue(string field, object value);
+        void SetJoinedObjValue(string field, IModel obj);
+
+        void LazyInit(object value);
     }
 }

@@ -1,10 +1,4 @@
-﻿using seal.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace seal.Helper
 {
@@ -12,8 +6,8 @@ namespace seal.Helper
     /// Hold reflection getter-setter for class object model
     /// </summary>
     public sealed class ModelFactory
-    {      
-        private Dictionary<string, TableInfo> tableMapping;    
+    {
+        private Dictionary<string, TableInfo> tableMapping;
         private ModelFactory()
         {
             tableMapping = new Dictionary<string, TableInfo>();
@@ -41,14 +35,8 @@ namespace seal.Helper
         /// <returns></returns>
         public TableInfo this[string tableName]
         {
-            set
-            {
-                tableMapping.Add(tableName, value);
-            }
-            get
-            {
-                return tableMapping[tableName];
-            }
+            set => tableMapping.Add(tableName, value);
+            get => tableMapping[tableName];
         }
 
         /// <summary>

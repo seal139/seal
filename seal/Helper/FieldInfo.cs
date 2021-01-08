@@ -1,18 +1,13 @@
-﻿using seal.Base;
-using seal.Interface;
+﻿using seal.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace seal.Helper
 {
     /// <summary>
     /// Mapping between column field and property getter-setter
     /// </summary>
-    public class FieldInfo : IMapping 
+    public class FieldInfo : IMapping
     {
         /// <summary>
         /// Property name

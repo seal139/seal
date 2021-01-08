@@ -1,11 +1,7 @@
-﻿using System;
+﻿using seal.Enumeration;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using seal.Base;
-using seal.Enumeration;
 
 namespace seal.Interface
 {
@@ -37,6 +33,8 @@ namespace seal.Interface
         /// <returns></returns>
         Func<IModel, object> CreateGetter(PropertyInfo property);
 
+        Func<IModel> CreateCtor<T>() where T : IModel;
+
         /// <summary>
         /// [Method definition] Create compiled expression for property setter
         /// </summary>
@@ -51,6 +49,6 @@ namespace seal.Interface
         /// <param name="raw">Raw data</param>
         /// <param name="uniqueIdentifierField">Primary field</param>
         /// <returns></returns>
-        string CompileQuery(Operation operation, string table, IList< object> raw, string uniqueIdentifierField);
+        string CompileQuery(Operation operation, string table, IList<object> raw, string uniqueIdentifierField);
     }
 }

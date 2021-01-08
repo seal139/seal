@@ -5,20 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using FieldInfo = seal.Helper.FieldInfo;
 
 namespace seal.Base
 {
     public abstract class ModelBase : IModel
     {
-        public bool Joined { get { return join; } }
-        public bool Initialized { get { return isInitialized; } }
-        public Operation Mode { get { return mode; } }
+        public bool Joined => join;
+        public bool Initialized => isInitialized;
+        public Operation Mode => mode;
         public abstract JoinMode RelationJoinMode { get; }
 
-        public abstract string UniqueIdentifier{get;}
+        public abstract string UniqueIdentifier { get; }
         public abstract string UniqueIdentifierValue { get; }
 
         protected internal bool isInitialized;
@@ -30,12 +28,6 @@ namespace seal.Base
             isInitialized = false;
             mode = Operation.Insert;
         }
-
-        //public ModelBase(int value)
-        //{
-        //    isInitialized = false;
-        //    mode = Operation.Update;
-        //}
 
         /// <summary>
         /// Extract data field using Reflection mechanism.
@@ -49,11 +41,7 @@ namespace seal.Base
             IList<object> ret = new List<object>();
             foreach (KeyValuePair<string, FieldInfo> f in ti)
             {
-                Func<IModel, object> getter = f.Value.Getter;
-                ret.Add(getter(this));
-
-                //object obj = f.Value.MethodDelegates.GetValue(this, null);
-                //ret.Add(f.Key, obj);
+                ret.Add(f.Value.Getter(this));
             }
             return ret;
         }
@@ -67,7 +55,7 @@ namespace seal.Base
         {
             TableInfo ti = GetTableInfo();
 
-            foreach(KeyValuePair<string, int> indexMap in ti.GetColumnMappingIndex)
+            foreach (KeyValuePair<string, int> indexMap in ti.GetColumnMappingIndex)
             {
                 FieldInfo field = ti[indexMap.Key];
                 PropertyInfo p = field.MethodDelegates;
@@ -76,11 +64,14 @@ namespace seal.Base
 
                 if (p.PropertyType.GetInterfaces().Contains(typeof(IModel)))
                 {
-                    ModelBase q = (ModelBase)Activator.CreateInstance(p.PropertyType);
-                    // q.InvokeNew(keyValue.Value);
+                    ModelFactory mf = ModelFactory.GetInstance();
+                    TableInfo tblInfo = mf[p.PropertyType.Name];
+                    Func<IModel> constr = tblInfo.Constructor;
+                    IModel q = constr();
+
+                    q.LazyInit(values[indexMap.Value]);
 
                     setter(this, q);
-                    //p.SetValue(this, q);
                 }
                 else
                 {
@@ -97,21 +88,23 @@ namespace seal.Base
         /// </summary>
         /// <param name="fieldName"></param>
         /// <param name="value"></param>
-        public virtual void SetJoinedObjValue(string fieldName, object value)
+        public virtual void SetJoinedObjValue(string fieldName, IModel obj)
         {
-            join = true;
             TableInfo ti = GetTableInfo();
             FieldInfo field = ti[fieldName];
-            PropertyInfo p = field.MethodDelegates;
-            p.SetValue(this, value);
+
+            Action<IModel, object> setter = field.Setter;
+            setter(this, obj);
+
+            join = true;
         }
 
-        
+        public abstract void LazyInit(object value);
 
         protected internal TableInfo GetTableInfo()
         {
             ModelFactory mf = ModelFactory.GetInstance();
-            TableInfo ti = mf[this.GetType().Name];
+            TableInfo ti = mf[GetType().Name];
             return ti;
         }
     }
