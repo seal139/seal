@@ -24,6 +24,9 @@ namespace seal.Helper
             fields = new Dictionary<string, FieldInfo>();
         }
 
+
+        public Func<int, IModel> Ctor { get; set; }
+
         /// <summary>
         /// Class name that represent Table
         /// </summary>

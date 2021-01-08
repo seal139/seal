@@ -16,7 +16,7 @@ namespace seal.Base
     {
         public override JoinMode RelationJoinMode { get { return JoinMode.Once; } }
 
-        public static implicit operator ModelTable(int id)
+        public static explicit operator ModelTable(int id)
         {
             object obj = new object();
             ModelTable val = (ModelTable)obj;
@@ -24,7 +24,7 @@ namespace seal.Base
             return val;
         }
 
-        public static explicit operator int(ModelTable model)
+        public static implicit operator int?(ModelTable model)
         {
             return model.Id;
         }
@@ -34,6 +34,11 @@ namespace seal.Base
             Id = id;
             isInitialized = true;
         }
+
+        //public ModelTable(int value) : base()
+        //{
+        //    Id = value;
+        //}
 
         [Column("Id")]
         public int Id { get; set; }

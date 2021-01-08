@@ -44,6 +44,7 @@ namespace seal.Base
             tbl.FieldName = typeof(T).Name;
             tbl.Name = typeof(T).Name;
 
+
             PropertyInfo[] property_infos = (typeof(T)).GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public);
             foreach (PropertyInfo info in property_infos)
             {
@@ -72,8 +73,8 @@ namespace seal.Base
                     if (info.CanRead && info.CanWrite)
                     {
                         ci.MethodDelegates = info;
-                        ci.Setter =GenericGetterSetter.CreateSetter<T>(info);
-                        ci.Getter = GenericGetterSetter.CreateGetter<T>(info.Name);
+                        ci.Setter = Serializer.CreateSetter(info);
+                        ci.Getter = Serializer.CreateGetter(info);
 
                         if (info.PropertyType.IsSubclassOf(typeof(ModelTable)))
                         {

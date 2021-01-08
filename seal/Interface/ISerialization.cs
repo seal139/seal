@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using seal.Base;
@@ -28,6 +29,20 @@ namespace seal.Interface
         /// <param name="raw">Raw data</param>
         /// <returns>Instance of Model</returns>
         T Deserialize<T>(IDictionary<string, object> raw) where T : IModel, new();
+
+        /// <summary>
+        /// [Method definition] Create compiled expression for property getter
+        /// </summary>
+        /// <param name="property">Assembly property info</param>
+        /// <returns></returns>
+        Func<IModel, object> CreateGetter(PropertyInfo property);
+
+        /// <summary>
+        /// [Method definition] Create compiled expression for property setter
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public Action<IModel, object> CreateSetter(PropertyInfo property);
 
         /// <summary>
         /// Create CRUD query

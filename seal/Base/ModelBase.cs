@@ -18,8 +18,6 @@ namespace seal.Base
         public Operation Mode { get { return mode; } }
         public abstract JoinMode RelationJoinMode { get; }
 
-
-
         public abstract string UniqueIdentifier{get;}
         public abstract string UniqueIdentifierValue { get; }
 
@@ -31,6 +29,33 @@ namespace seal.Base
         {
             isInitialized = false;
             mode = Operation.Insert;
+        }
+
+        //public ModelBase(int value)
+        //{
+        //    isInitialized = false;
+        //    mode = Operation.Update;
+        //}
+
+        /// <summary>
+        /// Extract data field using Reflection mechanism.
+        /// Override this method with native code for better performance
+        /// </summary>
+        /// <returns>Mapping column name - value</returns>
+        public virtual IDictionary<string, object> Unpack()
+        {
+            TableInfo ti = GetTableInfo();
+
+            Dictionary<string, object> ret = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, FieldInfo> f in ti)
+            {
+                Func<IModel, object> getter = f.Value.Getter;
+                ret.Add(f.Key, getter(this));
+
+                //object obj = f.Value.MethodDelegates.GetValue(this, null);
+                //ret.Add(f.Key, obj);
+            }
+            return ret;
         }
 
         /// <summary>
@@ -46,7 +71,22 @@ namespace seal.Base
             {
                 FieldInfo field = ti[keyValue.Key];
                 PropertyInfo p = field.MethodDelegates;
-                p.SetValue(this, keyValue.Value);
+
+                Action<IModel, object> setter =  field.Setter;
+              
+                if (p.PropertyType.GetInterfaces().Contains(typeof(IModel)))
+                {
+                    ModelBase q = (ModelBase)Activator.CreateInstance(p.PropertyType);
+                    // q.InvokeNew(keyValue.Value);
+
+                    setter(this, q);
+                    //p.SetValue(this, q);
+                }
+                else
+                {
+                    setter(this, keyValue.Value);
+                }
+               
             }
 
             mode = Operation.Update;
@@ -67,23 +107,7 @@ namespace seal.Base
             p.SetValue(this, value);
         }
 
-        /// <summary>
-        /// Extract data field using Reflection mechanism.
-        /// Override this method with native code for better performance
-        /// </summary>
-        /// <returns>Mapping column name - value</returns>
-        public virtual IDictionary<string, object> Unpack()
-        {
-            TableInfo ti = GetTableInfo();
-
-            Dictionary<string, object> ret = new Dictionary<string, object>();
-            foreach(KeyValuePair<string, FieldInfo> f in ti)
-            {
-                object obj = f.Value.MethodDelegates.GetValue(this, null);
-                ret.Add(f.Key, obj);
-            }
-            return ret;
-        }
+        
 
         protected internal TableInfo GetTableInfo()
         {

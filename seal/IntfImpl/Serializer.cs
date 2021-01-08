@@ -5,6 +5,8 @@ using seal.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +22,46 @@ namespace seal.IntfImpl
 
         private Serializer() { }
 
+        public Func<IModel, object> CreateGetter(PropertyInfo property)
+        {
+            var parameter = Expression.Parameter(typeof(IModel), "i");
+            var cast = Expression.TypeAs(parameter, property.DeclaringType);
+
+            var getterBody = Expression.Property(cast, property);
+            var output = Expression.TypeAs(getterBody, typeof(object));
+
+            var exp = Expression.Lambda<Func<IModel, object>>(
+                output, parameter);
+
+            return exp.Compile();
+        }
+
+        public Action<IModel, object> CreateSetter(PropertyInfo property)
+        {
+            var parameter = Expression.Parameter(typeof(IModel), "i");
+            var cast = Expression.TypeAs(parameter, property.DeclaringType);
+
+            var input = Expression.Parameter(typeof(object), "p");
+            UnaryExpression conv;
+            //if (property.PropertyType.IsSubclassOf(typeof(Enum))){
+            conv = Expression.Convert(input, property.PropertyType);
+            //}
+            //else
+            //{
+            //    conv = Expression.TypeAs(parameter, property.PropertyType);               
+            //}
+
+
+            var prop = Expression.Property(cast, property);
+
+            Action<IModel, object> result = Expression.Lambda<Action<IModel, object>>
+              (
+                  Expression.Assign(prop, conv), parameter, input
+              ).Compile();
+
+            return result;
+        }
+
         /// <summary>
         /// Serialize class to Raw format
         /// </summary>
@@ -34,7 +76,7 @@ namespace seal.IntfImpl
             IDictionary<string, object> convertedData = new Dictionary<string, object>();
             foreach (KeyValuePair<string, object> pair in rawData)
             {
-                convertedData.Add(tInfo[pair.Key].FieldName, pair.Value);
+                convertedData.Add(tInfo[pair.Key].FieldName, ValueConverter(pair.Value));
             }
             return convertedData;
         }
@@ -55,6 +97,11 @@ namespace seal.IntfImpl
 
         private string ValueConverter(object value)
         {
+            if(value == null)
+            {
+                return "NULL";
+            }
+
             if (value.GetType().IsSubclassOf(typeof(DateTime)) || value is DateTime)
             {
                 return "'" + DateTimeUtility.GetSqlFormatDate((DateTime)value) + "'";
