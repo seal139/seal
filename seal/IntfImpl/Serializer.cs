@@ -146,7 +146,7 @@ namespace seal.IntfImpl
             bool first = true;
             string query = "";
 
-            IDictionary<string, object> compiledResult = new Dictionary<string, object>();
+            IDictionary<string, object> compiledQuery = new Dictionary<string, object>();
             IDictionary<string, object> bindings = new Dictionary<string, object>();
 
             switch (operation)
@@ -174,8 +174,8 @@ namespace seal.IntfImpl
 
                     query += column + value + ")";
 
-                    compiledResult.Add("query", query);
-                    compiledResult.Add("bindings", bindings);
+                    compiledQuery.Add("query", query);
+                    compiledQuery.Add("bindings", bindings);
                     break;
 
                 case Operation.Update:
@@ -192,8 +192,8 @@ namespace seal.IntfImpl
                         bindings.Add(keyVal.Key, keyVal.Value);
                     }
 
-                    compiledResult.Add("query", query);
-                    compiledResult.Add("bindings", bindings);
+                    compiledQuery.Add("query", query);
+                    compiledQuery.Add("bindings", bindings);
                     break;
 
                 case Operation.Delete:
@@ -218,7 +218,8 @@ namespace seal.IntfImpl
                 default:
                     throw new ApiException("Invalid SQL operation");
             }
-            return compiledResult;
+
+            return compiledQuery;
         }
     }
 }
