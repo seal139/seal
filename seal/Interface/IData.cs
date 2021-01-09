@@ -16,5 +16,6 @@ namespace seal.Interface
         string Connection { set; get; }
         void Open();
         void Close();
+        string ValueConverter(object value);
     }
 }
