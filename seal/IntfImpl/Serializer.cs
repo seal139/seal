@@ -35,10 +35,10 @@ namespace seal.IntfImpl
         public Func<IModel, object> CreateGetter(PropertyInfo property)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(IModel), "i");
-            UnaryExpression cast = Expression.TypeAs(parameter, property.DeclaringType);
+            UnaryExpression cast = Expression.Convert(parameter, property.DeclaringType);
 
             MemberExpression getterBody = Expression.Property(cast, property);
-            UnaryExpression output = Expression.TypeAs(getterBody, typeof(object));
+            UnaryExpression output = Expression.Convert(getterBody, typeof(object));
 
             Expression<Func<IModel, object>> exp = Expression.Lambda<Func<IModel, object>>(
                 output, parameter);
@@ -49,19 +49,10 @@ namespace seal.IntfImpl
         public Action<IModel, object> CreateSetter(PropertyInfo property)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(IModel), "i");
-            UnaryExpression cast = Expression.TypeAs(parameter, property.DeclaringType);
+            UnaryExpression cast = Expression.Convert(parameter, property.DeclaringType);
 
             ParameterExpression input = Expression.Parameter(typeof(object), "p");
-            UnaryExpression conv;
-            //if (property.PropertyType.IsSubclassOf(typeof(Enum))){
-            conv = Expression.Convert(input, property.PropertyType);
-            //}
-            //else
-            //{
-            //    conv = Expression.TypeAs(parameter, property.PropertyType);               
-            //}
-
-
+            UnaryExpression conv = Expression.Convert(input, property.PropertyType);
             MemberExpression prop = Expression.Property(cast, property);
 
             Action<IModel, object> result = Expression.Lambda<Action<IModel, object>>
@@ -95,7 +86,9 @@ namespace seal.IntfImpl
         /// <returns></returns>
         public T Deserialize<T>(IList<object> raw) where T : IModel, new()
         {
-            T obj = new T();
+            ModelFactory factory = ModelFactory.GetInstance();
+            TableInfo tInfo = factory[typeof(T).Name];
+            T obj = (T)tInfo.Constructor();
             obj.Pack(raw);
             return obj;
         }

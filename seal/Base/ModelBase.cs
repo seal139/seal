@@ -3,6 +3,7 @@ using seal.Helper;
 using seal.Interface;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using FieldInfo = seal.Helper.FieldInfo;
@@ -26,6 +27,7 @@ namespace seal.Base
         public ModelBase()
         {
             isInitialized = false;
+            ti = GetTableInfo();
             mode = Operation.Insert;
         }
 
@@ -36,8 +38,6 @@ namespace seal.Base
         /// <returns>Mapping column name - value</returns>
         public virtual IList<object> Unpack()
         {
-            TableInfo ti = GetTableInfo();
-
             IList<object> ret = new List<object>();
             foreach (KeyValuePair<string, FieldInfo> f in ti)
             {
@@ -53,29 +53,30 @@ namespace seal.Base
         /// <param name="values">Mapping column name - value</param>
         public virtual void Pack(IList<object> values)
         {
-            TableInfo ti = GetTableInfo();
+           
 
-            foreach (KeyValuePair<string, int> indexMap in ti.GetColumnMappingIndex)
+            foreach (KeyValuePair<string, FieldInfo> f in ti)
             {
-                FieldInfo field = ti[indexMap.Key];
-                PropertyInfo p = field.MethodDelegates;
 
-                Action<IModel, object> setter = field.Setter;
+                //KeyValuePair<string, int> indexMap in ti.GetColumnMappingIndex
+                //int index = ti.GetColumnMappingIndex[f.Value.Name];
+              
+                Action<IModel, object> setter = f.Value.Setter;
+                int idx = ti.GetColumnMappingIndex[f.Key];
 
-                if (p.PropertyType.GetInterfaces().Contains(typeof(IModel)))
+                if (f.Value.IsForeignKey)
                 {
                     ModelFactory mf = ModelFactory.GetInstance();
-                    TableInfo tblInfo = mf[p.PropertyType.Name];
+                    TableInfo tblInfo = mf[f.Value.MethodDelegates.PropertyType.Name];
                     Func<IModel> constr = tblInfo.Constructor;
                     IModel q = constr();
 
-                    q.LazyInit(values[indexMap.Value]);
-
+                    q.LazyInit(values[idx++]);
                     setter(this, q);
                 }
                 else
                 {
-                    setter(this, values[indexMap.Value]);
+                    setter(this, values[idx]);
                 }
             }
 
@@ -101,6 +102,7 @@ namespace seal.Base
 
         public abstract void LazyInit(object value);
 
+        TableInfo ti;
         protected internal TableInfo GetTableInfo()
         {
             ModelFactory mf = ModelFactory.GetInstance();
