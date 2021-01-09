@@ -131,14 +131,12 @@ namespace seal.IntfImpl
         /// <returns>True when one or more row(s) affected</returns>
         public bool TransactPost(IDictionary<string, object> query)
         {
-            Serializer serializer = new Serializer();
-
             com.CommandText = (string) query["query"];
             IDictionary<string, object> bindings = (IDictionary<string, object>) query["bindings"];
 
             foreach (KeyValuePair<string, object> binding in bindings)
             {
-                com.Parameters.AddWithValue(binding.Key, serializer.ValueConverter(binding.Value));
+                com.Parameters.AddWithValue(binding.Key, binding.Value);
             }
             int rowAffected = com.ExecuteNonQuery();
             if (rowAffected > 0)
