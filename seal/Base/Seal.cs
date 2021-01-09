@@ -2,6 +2,7 @@
 using seal.Enumeration;
 using seal.Helper;
 using seal.Interface;
+using seal.IntfImpl;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -26,7 +27,7 @@ namespace seal.Base
 
         private Seal()
         {
-            SqlQueryBuilder q = new SqlQueryBuilder();
+            SQLQueryBuilder queryBuilder = new SQLQueryBuilder();
 
 
             queryBuffer = new List<IDictionary<string, object>>();
@@ -116,16 +117,16 @@ namespace seal.Base
 
         public void Post<T>(T model) where T : IModel
         {
-            queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
+            //queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
         }
 
         public void Sync()
         {
             DbDriver.Open();
-            foreach (IDictionary<string, dynamic> query in queryBuffer)
-            {
-                DbDriver.TransactPost(query);
-            }
+            //foreach (IDictionary<string, dynamic> query in queryBuffer)
+            //{
+                //DbDriver.TransactPost(query);
+            //}
             DbDriver.Close();
         }
 

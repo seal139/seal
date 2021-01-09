@@ -9,8 +9,8 @@ namespace seal.Interface
     /// </summary>
     public interface IData
     {   
-        bool TransactPost(string query);
-        IList<IList<object>> TransactGet(string query);
+        bool TransactPost(string query, IDictionary<string, object> parameters);
+        IList<IList<object>> TransactGet(string query, IDictionary<string, object> parameters);
 
         string Database { set; get; }
         string Connection { set; get; }

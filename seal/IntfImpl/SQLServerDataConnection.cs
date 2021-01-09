@@ -1,5 +1,7 @@
-﻿using seal.Helper;
+﻿using seal.Enumeration;
+using seal.Helper;
 using seal.Interface;
+using seal.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -97,12 +99,17 @@ namespace seal.IntfImpl
         /// </summary>
         /// <param name="query">Query string</param>
         /// <returns>List of row(List of value for each column)</returns>
-        public IList<IList<object>> TransactGet(string query)
+        public IList<IList<object>> TransactGet(string query, IDictionary<string, object> parameters)
         {
             try
             {
                 IList<IList<object>> valueRead = new List<IList<object>>();
                 com.CommandText = query;
+
+                foreach (KeyValuePair<string, object> parameter in parameters)
+                {
+                    com.Parameters.AddWithValue(parameter.Key, ValueConverter(parameter.Value));
+                }
 
                 SqlDataReader reader = com.ExecuteReader();
                 while (reader.Read())
@@ -129,14 +136,13 @@ namespace seal.IntfImpl
         /// </summary>
         /// <param name="query">Query</param>
         /// <returns>True when one or more row(s) affected</returns>
-        public bool TransactPost(IDictionary<string, object> query)
+        public bool TransactPost(string query, IDictionary<string, object> parameters)
         {
-            com.CommandText = (string) query["query"];
-            IDictionary<string, object> bindings = (IDictionary<string, object>) query["bindings"];
+            com.CommandText = query;
 
-            foreach (KeyValuePair<string, object> binding in bindings)
+            foreach (KeyValuePair<string, object> parameter in parameters)
             {
-                com.Parameters.AddWithValue(binding.Key, binding.Value);
+                com.Parameters.AddWithValue(parameter.Key, ValueConverter(parameter.Value));
             }
             int rowAffected = com.ExecuteNonQuery();
             if (rowAffected > 0)
@@ -180,6 +186,54 @@ namespace seal.IntfImpl
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        private string ValueConverter(object value)
+        {
+            if (value == null)
+            {
+                return "NULL";
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(DateTime)) || value is DateTime)
+            {
+                return "'" + DateTimeUtility.GetSqlFormatDate((DateTime)value) + "'";
+            }
+
+            if ((value.GetType().IsSubclassOf(typeof(long)) || value is long) ||
+                (value.GetType().IsSubclassOf(typeof(int)) || value is int) ||
+                (value.GetType().IsSubclassOf(typeof(short)) || value is short) ||
+                (value.GetType().IsSubclassOf(typeof(double)) || value is double) ||
+                (value.GetType().IsSubclassOf(typeof(float)) || value is float))
+            {
+                return value.ToString();
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(string)) || value is string)
+            {
+                return "'" + value.ToString() + "'";
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(bool)) || value is bool)
+            {
+                if ((bool)value == true)
+                {
+                    return "1";
+                }
+                return "0";
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(IModel)) || value is IModel)
+            {
+                return ((IModel)value).UniqueIdentifierValue;
+            }
+
+            if (value.GetType().IsSubclassOf(typeof(Enum)))
+            {
+                return ((int)value).ToString();
+            }
+
+            throw new ApiException("Invalid value for invoking to database");
         }
     }
 }
