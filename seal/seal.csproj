@@ -65,6 +65,7 @@
     <Compile Include="Interface\IModel.cs" />
     <Compile Include="Interface\ISerialization.cs" />
     <Compile Include="Interface\IValidation.cs" />
+    <Compile Include="Interface\IQueryBuilder.cs" />
     <Compile Include="IntfImpl\Serializer.cs" />
     <Compile Include="IntfImpl\SQLServerDataConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

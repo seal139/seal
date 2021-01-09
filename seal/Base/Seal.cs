@@ -26,6 +26,9 @@ namespace seal.Base
 
         private Seal()
         {
+            SqlQueryBuilder q = new SqlQueryBuilder();
+
+
             queryBuffer = new List<IDictionary<string, object>>();
         }
         private IList<IDictionary<string, object>> queryBuffer;

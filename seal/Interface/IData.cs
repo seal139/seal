@@ -8,11 +8,7 @@ namespace seal.Interface
     /// Define mechanism for database transaction
     /// </summary>
     public interface IData
-    {
-        string BuildQuery(TableInfo tableInfo, string primaryField, Operation dataOperation);
-        string BuildQuery(TableInfo tableInfo, IList<object> rawField, string primaryField, Operation dataOperation);
-
-
+    {   
         bool TransactPost(string query);
         IList<IList<object>> TransactGet(string query);
 
@@ -20,8 +16,5 @@ namespace seal.Interface
         string Connection { set; get; }
         void Open();
         void Close();
-
-
-
     }
 }
