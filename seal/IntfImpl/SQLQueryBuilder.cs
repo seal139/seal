@@ -83,40 +83,42 @@ namespace seal.IntfImpl
         // Select
         public string AutoQuery(TableInfo tableInfo, string primaryField)
         {
-            query = "SELECT * FROM ";
+            query = "SELECT ";
+
             bool first = true;
             foreach(string fi in tableInfo.GetColumnMappingIndex.Keys)
             {
-                if (first)
+                if (!first)
                 {
                     query += ", ";
                 }
+                first = false;
                 query += fi;
             }
 
-            return query + " WHERE " + primaryField + " = @" + primaryField; ;
+            return query + " FROM " + tableInfo.Name + " WHERE " + primaryField + " = @" + primaryField;
         }
 
         // Select
-        public string AutoQuery(TableInfo tableInfo, string[] columns, string[] whereClauses)
+        public string AutoQuery(TableInfo tableInfo, string[] whereClauses)
         {
             query = "SELECT ";
-            string comma = ", ";
-            string and = " AND ";
 
-            // Set columns
-            for (int i = 0; i < columns.Length; i++)
+            bool first = true;
+            foreach (string fi in tableInfo.GetColumnMappingIndex.Keys)
             {
-                if (i + 1 == columns.Length)
+                if (!first)
                 {
-                    comma = " ";
+                    query += ", ";
                 }
-                query += columns[i] + comma;
+                first = false;
+                query += fi;
             }
 
-            query += "FROM " + tableInfo.Name + " WHERE ";
+            query += " FROM " + tableInfo.Name + " WHERE ";
 
             // Set where
+            string and = " AND ";
             for (int i = 0; i < whereClauses.Length; i++)
             {
                 if (i + 1 == whereClauses.Length)
