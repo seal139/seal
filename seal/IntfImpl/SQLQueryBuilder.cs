@@ -108,7 +108,7 @@ namespace seal.IntfImpl
             // Set columns
             for(int i = 0; i < columns.Length; i++)
             {
-                if(i + 1 < columns.Length)
+                if(i + 1 == columns.Length)
                 {
                     comma = " ";
                 }
@@ -120,7 +120,7 @@ namespace seal.IntfImpl
             // Set where
             for (int i = 0; i < whereClauses.Length; i++)
             {
-                if (i + 1 < whereClauses.Length)
+                if (i + 1 == whereClauses.Length)
                 {
                     and = "";
                 }
