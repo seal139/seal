@@ -115,7 +115,7 @@ namespace seal.IntfImpl
                 query += columns[i] + comma;
             }
 
-            query += "WHERE ";
+            query += "FROM " + table + " WHERE ";
 
             // Set where
             for (int i = 0; i < whereClauses.Length; i++)
