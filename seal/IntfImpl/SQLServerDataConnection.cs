@@ -138,7 +138,7 @@ namespace seal.IntfImpl
 
             foreach (KeyValuePair<string, object> binding in bindings)
             {
-                com.Parameters.AddWithValue(binding.Key, serializer.ValuConverter(binding.Value));
+                com.Parameters.AddWithValue(binding.Key, serializer.ValueConverter(binding.Value));
             }
             int rowAffected = com.ExecuteNonQuery();
             if (rowAffected > 0)
