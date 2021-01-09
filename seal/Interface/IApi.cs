@@ -19,6 +19,7 @@
         T[] ListAll<T>() where T : IModel;
         void Init<T>() where T : IModel;
         void Sync();
+
         ISerialization Serializer { set; get; }
         IData DbDriver { set; get; }
     }

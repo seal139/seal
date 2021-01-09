@@ -83,9 +83,18 @@ namespace seal.IntfImpl
         // Select
         public string AutoQuery(TableInfo tableInfo, string primaryField)
         {
-            query = "SELECT * FROM " + tableInfo.Name + " WHERE " + primaryField + " = @" + primaryField;
+            query = "SELECT * FROM ";
+            bool first = true;
+            foreach(string fi in tableInfo.GetColumnMappingIndex.Keys)
+            {
+                if (first)
+                {
+                    query += ", ";
+                }
+                query += fi;
+            }
 
-            return query;
+            return query + " WHERE " + primaryField + " = @" + primaryField; ;
         }
 
         // Select
