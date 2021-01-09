@@ -15,7 +15,7 @@ namespace seal.IntfImpl
         private string query;
 
         // Insert / Update
-        string AutoQuery(TableInfo tableInfo, string primaryField, IList<object> rawField, bool isInsert)
+        public string AutoQuery(TableInfo tableInfo, string primaryField, IList<object> rawField, bool isInsert)
         {
             var columnMapping = tableInfo.GetColumnMappingIndex;
 
@@ -76,7 +76,7 @@ namespace seal.IntfImpl
         }
 
         // Delete
-        string AutoQuery(TableInfo tableInfo, string primaryField, object primaryKeyValue)
+        public string AutoQuery(TableInfo tableInfo, string primaryField, object primaryKeyValue)
         {
             query = "DELETE FROM " + tableInfo.Name + " WHERE " + primaryField + " = @" + primaryField;
 
@@ -84,7 +84,7 @@ namespace seal.IntfImpl
         }
 
         // Select
-        string AutoQuery(TableInfo tableInfo, string primaryField)
+        public string AutoQuery(TableInfo tableInfo, string primaryField)
         {
             query = "SELECT * FROM " + tableInfo.Name + " WHERE " + primaryField + " = @" + primaryField;
 
@@ -92,14 +92,14 @@ namespace seal.IntfImpl
         }
 
         // Select
-        string AutoQuery(TableInfo tableInfo, string primaryField, string whereClause)
+        public string AutoQuery(TableInfo tableInfo, string primaryField, string whereClause)
         {
             query = "SELECT * FROM " + tableInfo.Name + " " + whereClause;
 
             return query;
         }
 
-        string BuildQuery(string table, string[] columns, string[] whereClauses)
+        public string BuildQuery(string table, string[] columns, string[] whereClauses)
         {
             query = "SELECT ";
             string comma = ", ";
