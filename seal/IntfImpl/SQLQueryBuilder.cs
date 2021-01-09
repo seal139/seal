@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace seal.IntfImpl
 {
-    class SQLQueryBuilder
+    class SQLQueryBuilder : IQueryBuilder
     {
         private string query;
 
