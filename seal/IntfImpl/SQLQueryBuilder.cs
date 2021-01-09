@@ -52,21 +52,18 @@ namespace seal.IntfImpl
 
                 foreach (KeyValuePair<string, int> kv in columnMapping)
                 {
-                    if (rawField[kv.Value] != null)
+                    // Skip if primaryField
+                    if ((string) rawField[kv.Value] == primaryField)
                     {
-                        // Skip if primaryField
-                        if ((string) rawField[kv.Value] == primaryField)
-                        {
-                            continue;
-                        }
-
-                        if (!first)
-                        {
-                            query += ", ";
-                        }
-                        first = false;
-                        query += kv.Key + " = " + "@" + kv.Value;
+                        continue;
                     }
+
+                    if (!first)
+                    {
+                        query += ", ";
+                    }
+                    first = false;
+                    query += kv.Key + " = " + "@" + kv.Value;
                 }
 
                 query += " WHERE " + primaryField + " = @" + primaryField;
