@@ -26,9 +26,9 @@ namespace seal.Base
 
         private Seal()
         {
-            queryBuffer = new List<string>();
+            queryBuffer = new List<IDictionary<string, object>>();
         }
-        private IList<string> queryBuffer;
+        private IList<IDictionary<string, object>> queryBuffer;
 
 
         public ISerialization Serializer { get; set; }
@@ -113,13 +113,13 @@ namespace seal.Base
 
         public void Post<T>(T model) where T : IModel
         {
-            //  queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
+            queryBuffer.Add(Serializer.CompileQuery(model.Mode, typeof(T).Name, model.Unpack(), model.UniqueIdentifier));
         }
 
         public void Sync()
         {
             DbDriver.Open();
-            foreach (string query in queryBuffer)
+            foreach (IDictionary<string, dynamic> query in queryBuffer)
             {
                 DbDriver.TransactPost(query);
             }
@@ -149,7 +149,7 @@ namespace seal.Base
 
         public void Delete<T>(string whereClause) where T : IModel
         {
-            queryBuffer.Add(Serializer.CompileQuery(Operation.Delete, typeof(T).Name, null, null) + " " + whereClause);
+            //queryBuffer.Add(Serializer.CompileQuery(Operation.Delete, typeof(T).Name, null, null) + " " + whereClause);
         }
 
         public T[] FindList<T>(string whereClause) where T : IModel

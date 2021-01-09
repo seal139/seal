@@ -49,6 +49,6 @@ namespace seal.Interface
         /// <param name="raw">Raw data</param>
         /// <param name="uniqueIdentifierField">Primary field</param>
         /// <returns></returns>
-        string CompileQuery(Operation operation, string table, IList<object> raw, string uniqueIdentifierField);
+        IDictionary<string, object> CompileQuery(Operation operation, string table, IList<object> raw, string uniqueIdentifierField);
     }
 }

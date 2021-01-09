@@ -12,7 +12,7 @@ namespace seal.Interface
         /// </summary>
         /// <param name="query">Query string</param>
         /// <returns>True when code successfuly executed</returns>
-        bool TransactPost(string query);
+        bool TransactPost(IDictionary<string, object> query);
 
         /// <summary>
         /// [Method definition] SELECT

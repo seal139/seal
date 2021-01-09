@@ -141,10 +141,13 @@ namespace seal.IntfImpl
             throw new ApiException("Invalid value for invoking to database");
         }
 
-        public string CompileQuery(Operation operation, String table, IList<object> raw, string uniqueIdentifierField)
+        public IDictionary<string, object> CompileQuery(Operation operation, String table, IList<object> raw, string uniqueIdentifierField)
         {
             bool first = true;
             string query = "";
+
+            IDictionary<string, object> compiledResult = new Dictionary<string, object>();
+            IDictionary<string, object> bindings = new Dictionary<string, object>();
 
             switch (operation)
             {
@@ -165,10 +168,14 @@ namespace seal.IntfImpl
 
                         first = false;
                         column += keyVal.Key;
-                        value += ValueConverter(keyVal.Value);
+                        value += "@" + keyVal.Key;
+                        bindings.Add(keyVal.Key, keyVal.Value);
                     }
 
                     query += column + value + ")";
+
+                    compiledResult.Add("query", query);
+                    compiledResult.Add("bindings", bindings);
                     break;
 
                 case Operation.Update:
@@ -181,9 +188,12 @@ namespace seal.IntfImpl
                             query += ", ";
                         }
                         first = false;
-                        query += keyVal.Key + " = " + ValueConverter(keyVal.Value);
-
+                        query += keyVal.Key + " = " + "@" + keyVal.Key;
+                        bindings.Add(keyVal.Key, keyVal.Value);
                     }
+
+                    compiledResult.Add("query", query);
+                    compiledResult.Add("bindings", bindings);
                     break;
 
                 case Operation.Delete:
@@ -208,7 +218,7 @@ namespace seal.IntfImpl
                 default:
                     throw new ApiException("Invalid SQL operation");
             }
-            return query;
+            return compiledResult;
         }
     }
 }

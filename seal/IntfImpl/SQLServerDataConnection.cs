@@ -127,11 +127,19 @@ namespace seal.IntfImpl
         /// <summary>
         /// Transact SQL query for INSERT, UPDATE, or DELETE operation
         /// </summary>
-        /// <param name="query">Query string</param>
+        /// <param name="query">Query</param>
         /// <returns>True when one or more row(s) affected</returns>
-        public bool TransactPost(string query)
+        public bool TransactPost(IDictionary<string, object> query)
         {
-            com.CommandText = query;
+            Serializer serializer = new Serializer();
+
+            com.CommandText = (string) query["query"];
+            IDictionary<string, object> bindings = (IDictionary<string, object>) query["bindings"];
+
+            foreach (KeyValuePair<string, object> binding in bindings)
+            {
+                com.Parameters.AddWithValue(binding.Key, serializer.ValuConverter(binding.Value));
+            }
             int rowAffected = com.ExecuteNonQuery();
             if (rowAffected > 0)
             {
