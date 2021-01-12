@@ -70,6 +70,14 @@ namespace test
 
         static void Main(string[] args)
         {
+            ExpressionBuilder eb = "MyColum";
+            eb.Equal("val1").And(ExpressionBuilder.Group(new ExpressionBuilder("Column2")
+                .GreaterThan("29").And("Column3").SmallerThan("20")).Or("foo").NotEqual("bar"));
+            Console.WriteLine((string)eb);
+
+            Console.ReadLine();
+
+
             int cnt = 10000000;
             Stopwatch stopWatch = new Stopwatch();
 

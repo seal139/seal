@@ -42,13 +42,5 @@ namespace seal.Interface
         /// <returns></returns>
         public Action<IModel, object> CreateSetter(PropertyInfo property);
 
-        /// <summary>
-        /// Create CRUD query
-        /// </summary>
-        /// <param name="operation">CRUD Operation</param>
-        /// <param name="raw">Raw data</param>
-        /// <param name="uniqueIdentifierField">Primary field</param>
-        /// <returns></returns>
-        IDictionary<string, object> CompileQuery(Operation operation, string table, IList<object> raw, string uniqueIdentifierField);
     }
 }

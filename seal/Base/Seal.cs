@@ -134,6 +134,9 @@ namespace seal.Base
         {
             foreach (T obj in model)
             {
+                Serializer.Serialize<T>(obj);
+                IQueryBuilder qb;
+                qb.
                 // queryBuffer.Add(Serializer.CompileQuery(obj.Mode, typeof(T).Name, obj.Unpack(), obj.UniqueIdentifier));
             }
         }

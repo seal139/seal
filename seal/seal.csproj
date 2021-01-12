@@ -51,12 +51,13 @@
     <Compile Include="Base\ModelTable.cs" />
     <Compile Include="Base\ModelView.cs" />
     <Compile Include="Enumeration\JoinMode.cs" />
+    <Compile Include="Enumeration\LinkOperator.cs" />
     <Compile Include="Enumeration\LogicalOperator.cs" />
     <Compile Include="Enumeration\Operation.cs" />
     <Compile Include="Helper\Error.cs" />
     <Compile Include="Helper\APIException.cs" />
+    <Compile Include="Helper\ExpressionBuilder.cs" />
     <Compile Include="Helper\FieldInfo.cs" />
-    <Compile Include="Helper\GenericGetterSetter.cs" />
     <Compile Include="Helper\ModelFactory.cs" />
     <Compile Include="Helper\TableInfo.cs" />
     <Compile Include="Interface\IApi.cs" />

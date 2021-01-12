@@ -200,7 +200,7 @@ namespace seal.IntfImpl
                     //query = "DELETE FROM " + table + " WHERE " + uniqueIdentifierField + " = " + raw[uniqueIdentifierField];
                     break;
 
-                case Operation.SELECT:
+                case Operation.Select:
                     query = "SELECT ";
                     foreach (KeyValuePair<string, object> keyVal in raw)
                     {

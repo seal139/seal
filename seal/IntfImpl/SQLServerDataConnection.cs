@@ -11,7 +11,7 @@ namespace seal.IntfImpl
     /// <summary>
     /// Provide basic CRUD operation for SQL Server
     /// </summary>
-    public class SQLServerDataConnection : IData, IDisposable
+    public class SQLServerDataConnection :  IDisposable
     {
         /// <summary>
         /// Create connection string
